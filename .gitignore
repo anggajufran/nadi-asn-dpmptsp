@@ -1,0 +1,26 @@
+node_modules/
+vendor/
+dist/
+.env
+.env.*
+!.env.example
+.runtime/
+.sites-runtime/
+/storage/**
+!/storage/**/
+!/storage/**/.gitignore
+bootstrap/cache/*.php
+test-results/
+playwright-report/
+.DS_Store
+
+# Local personnel sources, backups, and credentials
+DATA PEGAWAI*.pdf
+personnel-*.json
+*.dump
+*.sql
+*.sqlite
+*.sqlite3
+*.pem
+*.key
+auth.json
