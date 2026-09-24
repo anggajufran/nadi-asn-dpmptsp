@@ -1,0 +1,6 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><style>
+@page{margin:36px}body{font-family:'DejaVu Sans',sans-serif;color:#223653;font-size:10px}h1{color:#28579a;font-size:17px}h2{font-size:14px}p{color:#667a94;line-height:1.6}table{border-collapse:collapse;width:100%;margin-top:20px}th{text-align:left;background:#28579a;color:white}td,th{padding:8px;border-bottom:1px solid #e1e8f1}.footer{font-size:8px;color:#7b8ca4;margin-top:25px}tr{page-break-inside:avoid}
+</style></head><body><h1>NADI ASN DPMPTSP Prov. Sulawesi Tengah</h1><h2>Ringkasan Statistik Kepegawaian</h2><p>Data per {{ $stats['asOf'] }}. Statistik agregat; identitas pegawai tidak disertakan.</p><p>Total ASN: {{ $stats['total'] }} · PPPK Paruh Waktu (terpisah): {{ $stats['partTime'] }}</p><table><thead><tr><th>Kategori</th><th>Kelompok</th><th>Jumlah</th></tr></thead><tbody>
+@foreach(['units'=>'Unit kerja','composition'=>'Jenis ASN','education'=>'Pendidikan','gender'=>'Gender','positions'=>'Jabatan','grades'=>'Golongan PNS','pppkGrades'=>'Golongan PPPK','functional'=>'Jabatan fungsional'] as $key=>$label)
+@foreach($stats[$key] as $row)<tr><td>{{ $label }}</td><td>{{ $row['label'] }}</td><td>{{ $row['display'] ?? $row['value'] ?? 0 }}</td></tr>@endforeach
+@endforeach</tbody></table><p class="footer">ID laporan: {{ $id }} · Statistik agregat tanpa identitas individu.</p></body></html>

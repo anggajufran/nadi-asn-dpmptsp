@@ -1,0 +1,56 @@
+name: nadi-asn
+x-app: &app
+  build:
+    context: ..
+    dockerfile: infra/docker/Dockerfile
+    target: app
+  env_file: ../.env
+  volumes:
+    - private_files:/var/www/storage/app/private
+    - app_logs:/var/www/storage/logs
+  networks: [backend]
+  restart: unless-stopped
+  depends_on:
+    db:
+      condition: service_healthy
+  logging:
+    driver: json-file
+    options: {max-size: "10m", max-file: "3"}
+services:
+  app:
+    <<: *app
+  worker:
+    <<: *app
+    command: ["php", "artisan", "queue:work", "--sleep=3", "--tries=3", "--timeout=90", "--max-time=3600"]
+  scheduler:
+    <<: *app
+    command: ["php", "artisan", "schedule:work"]
+  web:
+    build:
+      context: ..
+      dockerfile: infra/docker/Dockerfile
+      target: web
+    ports: ["127.0.0.1:8080:8080"]
+    networks: [backend]
+    depends_on: [app]
+    restart: unless-stopped
+  db:
+    image: postgres:16.10-bookworm
+    environment:
+      POSTGRES_DB: nadi_asn
+      POSTGRES_USER: nadi_owner
+      POSTGRES_PASSWORD: ${DB_OWNER_PASSWORD:?Set DB_OWNER_PASSWORD for local provisioning}
+    volumes: ["database:/var/lib/postgresql/data"]
+    networks: [backend]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nadi_owner -d nadi_asn"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+networks:
+  backend:
+volumes:
+  database:
+  private_files:
+  app_logs:

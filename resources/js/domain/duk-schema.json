@@ -1,0 +1,34 @@
+[
+  {
+    "key": "dukPositionLevel",
+    "label": "Jenjang jabatan DUK",
+    "type": "select",
+    "options": [
+      "JPT Utama",
+      "JPT Madya",
+      "JPT Pratama",
+      "Administrator",
+      "Pengawas",
+      "Fungsional Utama",
+      "Fungsional Madya",
+      "Fungsional Muda",
+      "Fungsional Pertama",
+      "Fungsional Penyelia",
+      "Fungsional Mahir",
+      "Fungsional Terampil",
+      "Fungsional Pemula",
+      "Pelaksana"
+    ]
+  },
+  {
+    "key": "trainingLevel",
+    "label": "Tingkat diklat diakui",
+    "type": "select",
+    "options": ["Belum pernah", "PIM IV / PKP", "PIM III / PKA", "PIM II / PKN II", "PIM I / PKN I"]
+  },
+  {
+    "key": "trainingDate",
+    "label": "Tanggal lulus diklat",
+    "type": "date"
+  }
+]

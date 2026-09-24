@@ -1,0 +1,14 @@
+node_modules
+vendor
+.git
+.env
+.env.*
+.runtime
+storage
+bootstrap/cache
+*.md
+*.png
+docs
+test-results
+playwright-report
+dist
