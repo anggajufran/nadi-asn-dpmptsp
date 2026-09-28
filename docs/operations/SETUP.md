@@ -1,6 +1,6 @@
 # Menyiapkan lingkungan Laravel dan VPS
 
-**Laravel lokal, migrasi, dan tes PostgreSQL sudah dijalankan pada 12 September 2026. Bagian Docker/VPS/backup tetap merupakan runbook yang belum diuji, bukan konfirmasi siap produksi.**
+**Pembaruan 28 September 2026:** build Docker, pemulihan data dan pengujian keamanan runtime sudah dijalankan pada VPS privat. Peluncuran publik masih menunggu domain/HTTPS tepercaya dan layanan email. Lihat [laporan keamanan](SECURITY_REVIEW_2026-09-28.md) dan [akses VPS privat](VPS_PRIVATE.md).
 
 ## Pratinjau yang tersedia
 
@@ -20,21 +20,24 @@ Gunakan Node 24 dan `npm ci`, kemudian `npm run dev`. Jangan membuka Vite ke jar
 
 ## Docker Compose
 
-`infra/compose.yaml` mendefinisikan web, app, worker, scheduler dan database. Database tidak membuka port ke host. Nginx terikat ke loopback 8080 untuk reverse proxy TLS di host.
+`infra/compose.yaml` mendefinisikan web, app, worker, scheduler, database dan antivirus. Database/ClamAV/PHP-FPM tidak membuka port ke host. Web hanya terikat pada `127.0.0.1:18443` dan menggunakan TLS.
 
-- `DB_OWNER_PASSWORD` diperlukan saat provisioning container PostgreSQL.
-- `POSTGRES_USER=nadi_owner` adalah owner bootstrap; **bukan** role runtime.
-- Buat role `nadi_runtime` dan password yang sesuai `.env` setelah provisioning, dengan hak minimum. Jalankan migrasi menggunakan role migrator/owner yang terpisah.
-- File Compose membaca konfigurasi interpolasi dari `--env-file .env`; app sendiri membaca file `.env` yang sama.
-- Build image harus sukses dan lulus pengujian sebelum menjalankan production services.
-- Dockerfile menggunakan tag baseline eksplisit. Validasi patch yang masih didukung, perbarui bila diperlukan, dan kunci digest sebelum production.
-- Jangan langsung set `NADI_PRODUCTION_READY=true`; flag ini adalah catatan gate preflight, bukan pengganti penyelesaian fitur dan UAT.
-
-Contoh build integrasi setelah seluruh prasyarat terpenuhi:
+- Buat `.deploy/` mode 0700 di root project. Konfigurasi runtime berada di `.deploy/app.env` mode 0600; salin struktur `.env.example` dan isi secara privat.
+- `.deploy/db-owner-password` adalah secret bootstrap PostgreSQL yang hanya dipasang pada container DB. Jangan memasukkan password owner ke `app.env`.
+- `.deploy/tls/server.crt` dan `server.key` menyediakan TLS; key mode 0600. Sertifikat localhost sementara hanya untuk pengujian privat.
+- Buat `nadi_runtime` dengan password berbeda. Jalankan migrasi/pemulihan sebagai owner, kemudian terapkan `infra/docker/runtime-grants.sql`. Ulangi grant setelah migrasi berikutnya, bukan memberi owner kepada runtime.
+- Aplikasi produksi wajib `APP_ENV=production`, `APP_DEBUG=false`, `SESSION_SECURE_COOKIE=true`, `NADI_UPLOAD_SCAN_ENABLED=true`. ClamAV gagal/tidak aktif menyebabkan unggahan ditolak.
+- Image dasar dikunci digest; evaluasi pembaruan keamanan sebelum mengganti digest dan membangun rilis baru.
+- Jangan menjalankan `down -v`, reset database, atau restore menimpa instalasi yang sudah berisi data. Gunakan backup dan prosedur cutover.
+- `NADI_PRODUCTION_READY` adalah catatan gate preflight, bukan firewall atau pengganti uji penerimaan.
 
 ```sh
-docker compose --env-file .env -f infra/compose.yaml build
+docker compose -f infra/compose.yaml build
+docker compose -f infra/compose.yaml up -d
+docker compose -f infra/compose.yaml exec app php artisan nadi:preflight
 ```
+
+Compose memerlukan seluruh secret dan sertifikat sebelum dijalankan. Domain publik nantinya dapat dilayani Nginx Proxy Manager yang sudah ada dengan konfigurasi khusus NADI ASN; jangan mengganti konfigurasi aplikasi kantor lain.
 
 ## Target Hostinger VPS
 

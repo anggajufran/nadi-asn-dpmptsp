@@ -4,12 +4,18 @@ x-app: &app
     context: ..
     dockerfile: infra/docker/Dockerfile
     target: app
-  env_file: ../.env
+  image: nadi-asn-app:local
+  env_file: ../.deploy/app.env
   volumes:
     - private_files:/var/www/storage/app/private
     - app_logs:/var/www/storage/logs
-  networks: [backend]
+  networks: [backend, outbound]
   restart: unless-stopped
+  security_opt: ["no-new-privileges:true"]
+  cap_drop: [ALL]
+  mem_limit: 768m
+  cpus: 1.0
+  pids_limit: 128
   depends_on:
     db:
       condition: service_healthy
@@ -25,21 +31,34 @@ services:
   scheduler:
     <<: *app
     command: ["php", "artisan", "schedule:work"]
+    mem_limit: 256m
   web:
     build:
       context: ..
       dockerfile: infra/docker/Dockerfile
       target: web
-    ports: ["127.0.0.1:8080:8080"]
-    networks: [backend]
+    image: nadi-asn-web:local
+    ports: ["127.0.0.1:${NADI_HTTPS_PORT:-18443}:8443"]
+    volumes: ["../.deploy/tls:/etc/nginx/tls:ro"]
+    # Docker needs a non-internal network for the explicit loopback publication.
+    networks: [backend, outbound]
     depends_on: [app]
     restart: unless-stopped
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 128m
+    cpus: 0.5
+    pids_limit: 64
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
   db:
-    image: postgres:16.10-bookworm
+    image: postgres:16-bookworm@sha256:efedf3595f1d6f415c08568ba171029bf54052e754cc9f030e3f2412b21f3d67
     environment:
       POSTGRES_DB: nadi_asn
       POSTGRES_USER: nadi_owner
-      POSTGRES_PASSWORD: ${DB_OWNER_PASSWORD:?Set DB_OWNER_PASSWORD for local provisioning}
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_owner_password
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+    secrets: [db_owner_password]
     volumes: ["database:/var/lib/postgresql/data"]
     networks: [backend]
     healthcheck:
@@ -48,9 +67,42 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 768m
+    cpus: 1.0
+    pids_limit: 128
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
+  antivirus:
+    image: clamav/clamav:stable@sha256:ebec5bc138401b36ae987caa1a3fa3c3b2a21ed3d51f0bfa5852825e663e67b0
+    healthcheck:
+      test: ["CMD", "clamdscan", "--config-file=/etc/clamav/clamd.conf", "--ping=1"]
+      interval: 30s
+      timeout: 10s
+      start_period: 120s
+      retries: 3
+    volumes:
+      - signatures:/var/lib/clamav
+      - ./docker/clamd.conf:/etc/clamav/clamd.conf:ro
+    networks: [backend, outbound]
+    restart: unless-stopped
+    security_opt: ["no-new-privileges:true"]
+    mem_limit: 3g
+    cpus: 1.0
+    pids_limit: 128
+    logging:
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
 networks:
   backend:
+    internal: true
+  outbound:
 volumes:
   database:
   private_files:
   app_logs:
+  signatures:
+secrets:
+  db_owner_password:
+    file: ../.deploy/db-owner-password

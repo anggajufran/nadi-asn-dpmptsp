@@ -12,8 +12,26 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias(['full-session' => RequireFullSession::class]);
         $middleware->web(append: [App\Modules\IdentityAccess\Middleware\SecurityHeaders::class]);
+        $middleware->trustProxies(
+            headers: \Illuminate\Http\Request::HEADER_X_FORWARDED_FOR |
+                \Illuminate\Http\Request::HEADER_X_FORWARDED_PROTO,
+        );
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(fn($request) => $request->is('api/*'));
+        $exceptions->respond(function ($response) {
+            if (request()->is('api/*')) {
+                if ($response->getStatusCode() === 500 && !config('app.debug')) {
+                    $response = response()->json(
+                        ['message' => 'Terjadi gangguan pada server. Silakan coba kembali.'],
+                        500,
+                    );
+                }
+                $response->headers->set('Cache-Control', 'no-store');
+                $response->headers->set('X-Content-Type-Options', 'nosniff');
+                $response->headers->set('X-Frame-Options', 'DENY');
+            }
+            return $response;
+        });
     })
     ->create();

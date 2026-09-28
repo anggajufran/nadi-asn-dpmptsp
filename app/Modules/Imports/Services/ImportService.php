@@ -52,17 +52,40 @@ final class ImportService
     public function upload(User $user, UploadedFile $file): ImportBatch
     {
         abort_unless($user->canWrite(), 403);
+        abort_unless(
+            strtolower($file->getClientOriginalExtension()) === 'xlsx' &&
+                $file->getSize() > 0 &&
+                $file->getSize() <= 5 * 1024 * 1024,
+            422,
+            'Gunakan berkas XLSX maksimal 5 MB.',
+        );
+        app(UploadScanner::class)->assertClean($file->getRealPath());
         $zip = new \ZipArchive();
         abort_unless($zip->open($file->getRealPath()) === true, 422, 'Berkas XLSX tidak valid.');
         $expanded = 0;
         try {
             abort_if($zip->numFiles > 2000, 422, 'Struktur berkas terlalu besar.');
+            foreach (['[Content_Types].xml', 'xl/workbook.xml', '_rels/.rels'] as $required) {
+                abort_if($zip->locateName($required) === false, 422, 'Struktur XLSX tidak valid.');
+            }
+            $seen = [];
             for ($i = 0; $i < $zip->numFiles; $i++) {
                 $entry = $zip->statIndex($i);
+                $name = strtolower(str_replace('\\', '/', $entry['name']));
+                abort_if(
+                    isset($seen[$name]) ||
+                        str_starts_with($name, '/') ||
+                        in_array('..', explode('/', $name), true) ||
+                        ($entry['encryption_method'] ?? 0) !== 0,
+                    422,
+                    'Struktur arsip tidak diizinkan.',
+                );
+                $seen[$name] = true;
                 $expanded += $entry['size'];
                 abort_if(
-                    str_contains($entry['name'], 'externalLinks/') ||
-                        str_contains($entry['name'], 'vbaProject'),
+                    str_contains($name, 'externallinks/') ||
+                        str_contains($name, 'vbaproject') ||
+                        str_contains($name, 'embeddings/'),
                     422,
                     'Tautan eksternal dan makro tidak didukung.',
                 );
@@ -72,11 +95,32 @@ final class ImportService
                     'Ukuran terurai berkas melebihi 25 MB.',
                 );
             }
+            // Read XML only after every uncompressed size has been bounded.
+            for ($i = 0; $i < $zip->numFiles; $i++) {
+                $name = strtolower($zip->getNameIndex($i));
+                if (!str_ends_with($name, '.xml') && !str_ends_with($name, '.rels')) {
+                    continue;
+                }
+                $xml = $zip->getFromIndex($i);
+                abort_if(
+                    $xml === false ||
+                        preg_match(
+                            '/<!DOCTYPE|<!ENTITY|TargetMode\s*=\s*[\x22\x27]External|macroEnabled/i',
+                            $xml,
+                        ),
+                    422,
+                    'Konten aktif atau referensi eksternal tidak diizinkan.',
+                );
+            }
         } finally {
             $zip->close();
         }
         $reader = new Xlsx();
-        $info = $reader->listWorksheetInfo($file->getRealPath());
+        try {
+            $info = $reader->listWorksheetInfo($file->getRealPath());
+        } catch (\Throwable $e) {
+            abort(422, 'Berkas XLSX rusak atau tidak dapat dibaca.');
+        }
         abort_unless(count($info) === 1, 422, 'Gunakan satu worksheet data pada berkas import.');
         abort_if(
             $info[0]['totalRows'] > 1001 || $info[0]['totalColumns'] > 50,
@@ -84,7 +128,11 @@ final class ImportService
             'Maksimal 1.000 baris dan 50 kolom.',
         );
         $reader->setReadDataOnly(false);
-        $sheet = $reader->load($file->getRealPath());
+        try {
+            $sheet = $reader->load($file->getRealPath());
+        } catch (\Throwable $e) {
+            abort(422, 'Berkas XLSX rusak atau tidak dapat dibaca.');
+        }
         $worksheet = $sheet->getActiveSheet();
         $headers = [];
         $sources = [];

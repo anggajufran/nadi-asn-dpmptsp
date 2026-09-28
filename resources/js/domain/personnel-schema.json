@@ -1,0 +1,92 @@
+[
+  {
+    "key": "name",
+    "label": "Nama lengkap",
+    "type": "text"
+  },
+  {
+    "key": "nip",
+    "label": "NIP",
+    "type": "text"
+  },
+  {
+    "key": "rankName",
+    "label": "Pangkat / golongan",
+    "type": "text"
+  },
+  {
+    "key": "rankTmt",
+    "label": "TMT pangkat",
+    "type": "date"
+  },
+  {
+    "key": "position",
+    "label": "Nama jabatan",
+    "type": "text"
+  },
+  {
+    "key": "effectiveDate",
+    "label": "TMT jabatan",
+    "type": "date"
+  },
+  {
+    "key": "serviceYears",
+    "label": "Masa kerja tahun",
+    "type": "number"
+  },
+  {
+    "key": "serviceMonths",
+    "label": "Masa kerja bulan",
+    "type": "number"
+  },
+  {
+    "key": "institution",
+    "label": "Nama pendidikan",
+    "type": "text"
+  },
+  {
+    "key": "graduationDate",
+    "label": "Tanggal lulus",
+    "type": "date"
+  },
+  {
+    "key": "education",
+    "label": "Tingkat ijazah",
+    "type": "text"
+  },
+  {
+    "key": "birthPlace",
+    "label": "Tempat lahir",
+    "type": "text"
+  },
+  {
+    "key": "birthDate",
+    "label": "Tanggal lahir",
+    "type": "date"
+  },
+  {
+    "key": "ageAtReference",
+    "label": "Usia saat ini",
+    "type": "number"
+  },
+  {
+    "key": "gender",
+    "label": "Jenis kelamin",
+    "type": "select"
+  },
+  {
+    "key": "type",
+    "label": "Jenis pegawai",
+    "type": "select"
+  },
+  {
+    "key": "positionType",
+    "label": "Jenis jabatan",
+    "type": "select"
+  },
+  {
+    "key": "unit",
+    "label": "Unit kerja organisasi",
+    "type": "select"
+  }
+]

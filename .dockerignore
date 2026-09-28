@@ -7,8 +7,20 @@ vendor
 storage
 bootstrap/cache
 *.md
-*.png
+/*.png
 docs
 test-results
 playwright-report
 dist
+
+.deploy/
+tests
+DATA PEGAWAI*.pdf
+personnel-*.json
+!resources/js/domain/personnel-schema.json
+*.dump
+*.sqlite
+*.sqlite3
+*.pem
+*.key
+auth.json

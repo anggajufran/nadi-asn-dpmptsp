@@ -31,10 +31,25 @@ class AuthenticationTest extends TestCase
         $u->save();
         $this->withSession([
             'challenge_user' => $u->id,
+            'challenge_security_version' => $u->security_version,
             'challenge_expires' => now()->addMinutes(5)->timestamp,
         ]);
         $this->postJson('/api/auth/totp', [
             'code' => (new Google2FA())->getCurrentOtp('JBSWY3DPEHPK3PXP'),
         ])->assertUnprocessable();
+    }
+    public function test_password_challenge_is_revoked_when_account_security_changes(): void
+    {
+        $u = $this->user();
+        $this->withSession([
+            'challenge_user' => $u->id,
+            'challenge_security_version' => $u->security_version,
+            'challenge_expires' => now()->addMinutes(5)->timestamp,
+        ]);
+        $u->increment('security_version');
+        $this->postJson('/api/auth/totp', [
+            'code' => (new Google2FA())->getCurrentOtp('JBSWY3DPEHPK3PXP'),
+        ])->assertUnauthorized();
+        $this->getJson('/api/employees')->assertUnauthorized();
     }
 }

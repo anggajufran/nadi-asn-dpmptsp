@@ -49,6 +49,7 @@ class AuthController
         $r->session()->regenerateToken();
         $r->session()->put([
             'challenge_user' => $user->id,
+            'challenge_security_version' => $user->security_version,
             'challenge_expires' => now()->addMinutes(5)->timestamp,
         ]);
         return response()->json(['challenge' => true]);
@@ -64,7 +65,12 @@ class AuthController
         );
         $user = DB::transaction(function () use ($r) {
             $u = User::lockForUpdate()->findOrFail($r->session()->get('challenge_user'));
-            abort_unless($u->is_active, 403);
+            abort_unless($u->is_active && in_array($u->role, ['ADMIN', 'SUPER_ADMIN'], true), 403);
+            abort_unless(
+                $r->session()->get('challenge_security_version') === $u->security_version,
+                401,
+                'Akun berubah. Silakan masuk kembali.',
+            );
             $key = base64_decode((string) config('nadi.totp_key'), true);
             abort_unless($key && strlen($key) === 32, 503, 'Konfigurasi TOTP belum tersedia.');
             $secret = (new Encrypter($key, 'AES-256-CBC'))->decryptString($u->totp_secret);
@@ -82,7 +88,11 @@ class AuthController
         });
         Auth::login($user);
         $r->session()->regenerate();
-        $r->session()->forget(['challenge_user', 'challenge_expires']);
+        $r->session()->forget([
+            'challenge_user',
+            'challenge_expires',
+            'challenge_security_version',
+        ]);
         $r->session()->put([
             'totp_completed' => true,
             'security_version' => $user->security_version,
