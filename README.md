@@ -1,53 +1,95 @@
-# NADI ASN DPMPTSP
+# NADI ASN — DPMPTSP Prov. Sulawesi Tengah
 
-> **Pembaruan 15 September 2026:** DUK kembali mengikuti data sumber dan diatur manual oleh Super Admin. Sidebar dapat diminimalkan; tabel memiliki 10/30/50/All; urutan Excel mengikuti DUK; kategori Unit kerja berada di atas tabel PDF. Manajemen akun Admin tersedia di Pengaturan. Super Admin dapat menyetujui usulan sendiri. Kebijakan ini menggantikan hierarki otomatis dan syarat pemeriksa berbeda sebelumnya.
+Navigasi dan Analitik Data Internal ASN: portal statistik publik dan aplikasi pengelolaan kepegawaian dengan Vue 3, TypeScript, Laravel 13 dan PostgreSQL 16.
 
-Navigasi dan Analitik Data Internal ASN. Aplikasi Vue 3 + TypeScript dengan backend Laravel 13 dan PostgreSQL 16, mengikuti desain dashboard serta logo yang disediakan.
+**Status 30 September 2026: produksi aktif dan siap digunakan.**
 
-Diperbarui 14 September 2026. Revisi mengikuti permintaan terbaru pengguna. Aplikasi lokal sudah memuat 168 pegawai dari PDF: 55 PNS, 91 PPPK Penuh Waktu, dan 22 PPPK Paruh Waktu. Total ASN dalam pelaporan aplikasi adalah 146; PPPK Paruh Waktu direkap terpisah. Terdapat 12 unit kerja sesuai sumber setelah koreksi pembacaan teks yang meluber antarbaris.
+**Website:** https://nadiasndpmptspsulteng.online
 
-## Menjalankan aplikasi
+Database VPS menjadi sumber utama. Repository memuat kode, migrasi, fixture simulasi, desain dan dokumentasi; repository tidak berisi database pegawai nyata, password, secret OTP/SMTP, konfigurasi privat atau backup operasional. Clone repository tidak memulihkan data produksi.
 
-Konfigurasi lokal dan database sudah tersedia. Jangan membuat ulang cluster atau menimpa `.env`. Gunakan PHP 8.4 pada mesin ini.
+## Pengguna dan akses
+
+- **Publik:** statistik agregat, filter unit/jenis pegawai, serta ringkasan; nama, NIP, tanggal lahir dan dokumen individual tidak ditampilkan.
+- **Admin Kepegawaian:** akses internal sesuai izin backend, pengelolaan/pengajuan data dan Radar. Akun dapat lebih dari satu.
+- **Super Admin:** manajemen akun dan unit kerja, persetujuan, pengaturan urutan DUK dan laporan operasional. Super Admin dapat menyetujui usulan sendiri.
+
+Login internal menggunakan **NIP, password dan OTP**. Akun Admin dipilih dari Master Pegawai melalui Pengaturan → Manajemen Akun. Tautan aktivasi memungkinkan pengguna menentukan password dan autentikator sendiri. Admin yang lupa akses menghubungi Super Admin; pemulihan Super Admin menggunakan email terdaftar. Tidak tersedia password bawaan atau peran Pimpinan.
+
+## Fitur utama
+
+- Master Pegawai: pencarian, filter unit/jenis pegawai/jenis jabatan, profil, histori dan kelengkapan data dinamis.
+- DUK Digital: edit langsung dalam sel, simpan usulan batch, serta naik/turun urutan manual oleh Super Admin; tanpa hierarki otomatis.
+- Tabel menyediakan pilihan 10/30/50/All. Excel mengikuti urutan DUK; template/ekspor menggunakan skema bersama 18 kolom, NIP teks dan tanggal yang tervalidasi.
+- KP Radar dan KGB Radar mengikuti aturan instansi versi `2026-09-22.1`; dokumen pendukung dan hasil pemeriksaan perlu diisi petugas.
+- Laporan, riwayat ekspor privat, audit, konflik revisi dan persetujuan perubahan tersedia. Kredit developer hanya pada footer aplikasi, bukan laporan.
+- Tema awal light; pengguna dapat mengganti dark/light. Masa kerja keseluruhan bergerak bulanan dari acuan September 2026; usia dihitung berdasarkan tanggal lahir. MKG berbeda dari masa kerja keseluruhan.
+- Rekap pada peluncuran: **168 pegawai**, terdiri dari **55 PNS + 91 PPPK penuh waktu = 146 ASN**, dan **22 PPPK paruh waktu** direkap terpisah; 12 unit kerja. Angka dapat berubah melalui pengelolaan data produksi.
+
+## Operasional produksi
+
+Enam service terisolasi: web, app, worker, scheduler, PostgreSQL dan ClamAV. Nginx Proxy Manager melayani domain HTTPS; hanya web terhubung ke jaringan proxy kantor. Database tidak membuka port publik. Konfigurasi khusus tidak tampil sebagai Proxy Host pada UI NPM.
+
+| Komponen | Kondisi saat peluncuran |
+| --- | --- |
+| Domain / TLS | Aktif, redirect HTTP/www, perpanjangan sertifikat otomatis |
+| Email pemulihan | SMTP aktif; pemilik akun mengonfirmasi pemulihan berhasil |
+| Sumber data | VPS utama; database pengembangan lokal diatur read-only untuk koneksi baru |
+| Monitor | 21 pemeriksaan setiap 5 menit; email saat gangguan dan pulih |
+| Backup data | Google Drive terenkripsi setiap 14 hari, pukul 02.00 WITA |
+| Backup seluruh project | Google Drive terenkripsi setiap 3 bulan kalender, pukul 03.00 WITA |
+| Retensi | Backup lama diganti setelah backup baru terunggah dan terverifikasi |
+| Bukti rilis | 13 preflight lulus; 27 pemeriksaan domain sebelum pembukaan dan 26 setelah pembukaan lulus |
+
+Monitor berjalan pada VPS yang sama: VPS mati total memerlukan monitor eksternal yang belum dipasang. Kunci dekripsi backup harus diamankan terpisah di luar VPS. Jadwal backup mengikuti kebijakan pengelola; bukan backup setiap perubahan atau jaminan kehilangan data nol. Restore database terisolasi dan verifikasi arsip project sudah dilakukan.
+
+## Dokumentasi terbaru
+
+Mulai dari [indeks dokumentasi](docs/README.md) atau:
+
+- [Catatan peluncuran 30 September](docs/operations/LAUNCH_2026-09-30.md)
+- [Pemantauan dan penanganan gangguan](docs/operations/MONITORING.md)
+- [Domain dan sertifikat](docs/operations/DOMAIN_2026-09-30.md)
+- [Backup data Google Drive](docs/operations/BACKUP_GOOGLE_DRIVE.md) dan [backup project lengkap](docs/operations/BACKUP_PROJECT.md)
+- [Setup pengembangan](docs/operations/SETUP.md), [pengelolaan VPS](docs/operations/VPS_PRIVATE.md), [panduan pengguna](docs/user/PANDUAN.md), [Radar](docs/user/RADAR.md)
+- [Status implementasi](docs/STATUS_IMPLEMENTASI.md), [bukti validasi](docs/VALIDASI.md), [audit keamanan 28 September](docs/operations/SECURITY_REVIEW_2026-09-28.md)
+
+Buku PDF dan dokumen teknis edisi 29 September merupakan snapshot sebelum peluncuran; gunakan catatan operasi 30 September untuk status domain, SMTP, backup dan pemantauan terkini. PRD/Stage 1 disimpan sebagai acuan awal; revisi pengguna dan kode aktif dapat menggantikan rancangan awal.
+
+## Pengembangan dan simulasi
+
+Gunakan Node 24, PHP 8.4, Composer 2 dan PostgreSQL 16. Untuk clone baru, ikuti SETUP.md, buat konfigurasi privat sendiri, pasang dependensi dan gunakan database development/test terpisah. Jangan mengarahkan tes atau fixture ke produksi dan jangan menimpa `.env` yang sudah ada.
 
 ```sh
-/opt/homebrew/opt/php@8.4/bin/php artisan serve --host=127.0.0.1 --port=8000
-/opt/homebrew/opt/php@8.4/bin/php artisan queue:work --tries=3 --timeout=90
+composer install
+npm ci
+# Setelah konfigurasi database dan kunci aplikasi development siap:
+php artisan serve --host=127.0.0.1 --port=8000
+# Terminal kedua:
+php artisan queue:work --tries=3 --timeout=90
+# Terminal ketiga:
 npm run dev
 ```
 
-Jalankan ketiganya di terminal terpisah. Buka http://127.0.0.1:5173. Panduan menyalakan database setelah restart tersedia di `docs/operations/SETUP.md`.
+Frontend backend lokal: http://127.0.0.1:5173. Lingkungan lokal lama telah diarsipkan read-only; perintah di atas untuk lingkungan pengembangan yang sengaja disiapkan, bukan instruksi mengaktifkan penulisan pada arsip lokal.
 
-Akun Super Admin pertama memakai data Restu Anggara Pratama Jufran dan identitas login NIP. Aktivasi pribadi disediakan di `.runtime/aktivasi-super-admin.html`: pengguna menetapkan sendiri kata sandi dan autentikator. Tidak ada kata sandi bawaan. Tautan berlaku 24 jam dan satu kali.
+Untuk data sintetis: `npm run dev:demo`, lalu http://127.0.0.1:5176. Mode simulasi terpisah dari backend produksi; jangan memasukkan data nyata ke simulasi.
 
-Untuk evaluasi dengan data buatan: `npm run dev:demo`, lalu buka http://127.0.0.1:5176. Mode ini hanya memiliki pilihan Admin dan Super Admin, dengan state terpisah. Jangan memasukkan data pegawai asli ke ruang simulasi.
+## Struktur dan pengujian
 
-## Perubahan yang tersedia
-
-- Master Pegawai dan DUK menggunakan 19 kolom sesuai PDF; pencarian, filter, halaman tabel, histori dan indikator isian yang belum lengkap.
-- Kelengkapan dihitung ulang dari isian. Form menampilkan pratinjau persentase; data resmi berubah setelah persetujuan Super Admin.
-- DUK dapat diedit langsung dalam sel melalui Edit lembar, kemudian Simpan. Sel berubah ditandai, navigasi Tab tersedia, konflik revisi membatalkan seluruh pengajuan batch.
-- Super Admin menambah, mengganti nama, dan menonaktifkan unit kosong pada Pengaturan. Unit yang masih dipakai harus dipindahkan pegawainya terlebih dahulu.
-- Template impor dan ekspor XLSX memakai skema 19 kolom yang sama, NIP bertipe teks, tanggal ISO dan validasi sumber. Import backend memiliki staging, preview dan konfirmasi atomik.
-- Statistik publik menampilkan angka agregat tepat termasuk kelompok kecil, dengan filter unit/jenis. Identitas pegawai hanya tersedia setelah login dan TOTP.
-- Command Center memisahkan PNS, PPPK Penuh Waktu, PPPK Paruh Waktu dan kualitas data. Laporan operasional hanya untuk Super Admin.
-- Peran serta fitur Pimpinan dihapus dari aplikasi. Identitas audit lama tetap dipertahankan dengan akses nonaktif.
-
-## Struktur
-
-`app/Modules` memuat identitas, pegawai, referensi unit, tata kelola, analitik, impor, laporan dan audit. `resources/js` memuat aplikasi publik/internal dan modul UI. `resources/js/domain/personnel-schema.json` merupakan skema kolom bersama PHP/TypeScript. `scripts` berisi ekstraksi PDF dan server simulasi. `database/migrations`, `tests`, `infra`, dan `docs` menyediakan skema, pengujian, konfigurasi operasi dan panduan.
-
-Data sumber, cadangan, aktivasi, database serta hasil ekstraksi berada di penyimpanan privat. Data asli tidak dimasukkan ke bundle frontend atau aset publik.
-
-## Verifikasi dan batas versi
+`app/Modules` berisi modul backend; `resources/js` aplikasi Vue; `resources/js/domain/personnel-schema.json` skema bersama; `database/migrations` skema DB; `tests` pengujian; `infra` deployment/backup/domain/monitor; `docs` panduan dan bukti operasi.
 
 ```sh
 npm test
 npm run build
-/opt/homebrew/opt/php@8.4/bin/php vendor/bin/phpunit
+php vendor/bin/phpunit
 npm run check:php
+python3 -m unittest discover -s infra/backup -p 'test_*.py'
+python3 -m unittest discover -s infra/monitor -p 'test_*.py'
 ```
 
-Backend diuji pada PHP 8.4.25, Laravel 13.31.0 dan PostgreSQL 16.15. Pengujian menggunakan database terpisah. ExcelJS dimuat hanya saat diperlukan; build masih memperingatkan ukuran chunk XLSX.
+PHPUnit wajib memakai database testing terpisah. Baseline audit 28 September: 77 tes backend/375 assertion, 17 tes frontend, build dan audit dependensi lulus. Lihat VALIDASI.md untuk tanggal dan cakupan; hasil tersebut bukan klaim pentest independen atau jaminan bebas kerentanan. Build XLSX masih dapat memberi peringatan ukuran chunk.
 
-Versi lokal ini belum merupakan rilis produksi. KP/KGB mengikuti aturan instansi melalui pemeriksaan dokumen yang tersimpan dan diaudit; lihat [panduan Radar](docs/user/RADAR.md). Manajemen akun dan pemulihan sudah tersedia, tetapi pengiriman email nyata masih memerlukan SMTP. Snapshot lanjutan, deployment Hostinger, pemulihan backup dan UAT instansi masih memerlukan pekerjaan lanjutan. Delapan record mempunyai anomali pada sumber yang ditandai untuk pemeriksaan; nilai kosong tidak ditebak. Lihat [panduan penggunaan](docs/user/PANDUAN.md), [status](docs/STATUS_IMPLEMENTASI.md), dan [validasi](docs/VALIDASI.md).
+Batas yang diketahui: QR enrollment/recovery codes, consumer outbox, purge otomatis impor/berkas laporan dan pengujian beban menyeluruh belum tersedia. Kelengkapan mengukur isian, bukan kebenaran dokumen; anomali sumber harus ditinjau petugas.
+
+Developer: **Angga Jufran**.

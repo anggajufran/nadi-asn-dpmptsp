@@ -4,6 +4,8 @@ Tanggal: 28 September 2026. Status: **pemasangan privat di VPS; belum diluncurka
 
 Audit ini memeriksa source, riwayat Git, dependensi, pengujian aplikasi, dan konfigurasi runtime NADI ASN. Hasil lulus berlaku pada ruang lingkup pengujian di bawah, bukan jaminan bebas seluruh kerentanan atau pengganti pentest independen.
 
+> Pembaruan 30 September: prasyarat domain/TLS, SMTP, backup dan rekonsiliasi sudah dipenuhi; akses publik aktif. Laporan ini mempertahankan hasil audit tanggal 28 September. Status terbaru ada di [catatan peluncuran](LAUNCH_2026-09-30.md); monitor eksternal masih perlu ditambahkan.
+
 ## 20 pemeriksaan
 
 | No. | Pemeriksaan | Hasil dan bukti |

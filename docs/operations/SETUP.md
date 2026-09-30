@@ -2,6 +2,12 @@
 
 **Pembaruan 28 September 2026:** build Docker, pemulihan data dan pengujian keamanan runtime sudah dijalankan pada VPS privat. Peluncuran publik masih menunggu domain/HTTPS tepercaya dan layanan email. Lihat [laporan keamanan](SECURITY_REVIEW_2026-09-28.md) dan [akses VPS privat](VPS_PRIVATE.md).
 
+## Status operasional 30 September 2026
+
+Produksi aktif di https://nadiasndpmptspsulteng.online. Domain/HTTPS, SMTP dan pemulihan email sudah diuji; backup Google Drive 14 hari dan project tiga bulan aktif, dengan penggantian backup lama setelah verifikasi. Database VPS menjadi sumber utama; lokal lama diarsipkan read-only. Monitor host lima menit aktif; monitor eksternal belum tersedia. Lihat [peluncuran](LAUNCH_2026-09-30.md), [monitor](MONITORING.md) dan kedua runbook backup.
+
+Bagian instalasi berikut berlaku untuk lingkungan baru yang sengaja disiapkan. Catatan 28 September dan lingkungan lokal lama bersifat historis. Jangan mengikuti bootstrap/migrasi/reset untuk menimpa instalasi produksi yang sudah aktif.
+
 ## Pratinjau yang tersedia
 
 Gunakan Node 24 dan `npm ci`, kemudian `npm run dev`. Jangan membuka Vite ke jaringan publik. Mode default menghubungkan Laravel 8000. Untuk fixture sintetis gunakan `npm run dev:demo` di 5176.
@@ -39,7 +45,7 @@ docker compose -f infra/compose.yaml exec app php artisan nadi:preflight
 
 Compose memerlukan seluruh secret dan sertifikat sebelum dijalankan. Domain publik nantinya dapat dilayani Nginx Proxy Manager yang sudah ada dengan konfigurasi khusus NADI ASN; jangan mengganti konfigurasi aplikasi kantor lain.
 
-## Target Hostinger VPS
+## Rancangan deployment VPS (acuan awal; domain dikelola Hostinger)
 
 1. Tentukan domain, TLS, firewall, SSH keys, secret custody, log rotation dan monitor eksternal.
 2. Hanya Nginx yang menerima trafik pengguna. App, PostgreSQL, worker, dan scheduler tidak diekspos langsung.
@@ -50,11 +56,11 @@ Compose memerlukan seluruh secret dan sertifikat sebelum dijalankan. Domain publ
 
 ## Backup dan disaster recovery
 
-Contoh `infra/backup/backup.sh` menjalankan dump PostgreSQL custom, enkripsi `age`, checksum dan pengiriman `rclone`. Service/timer contoh menjadwalkan tiap empat jam.
+Contoh `infra/backup/backup.sh` menjalankan dump PostgreSQL custom, enkripsi `age`, checksum dan pengiriman `rclone`. Service/timer contoh menjadwalkan tiap empat jam dan **tidak digunakan pada VPS aktif**. Jadwal aktif memakai vps-backup.sh (14 hari) dan project-backup.sh (tiga bulan kalender) melalui cron.
 
 Konfigurasi `PGPASSFILE`, role backup, public key recipient age, rclone remote institusi, folder lokal, timeout, kapasitas disk, retention dan notifikasi kegagalan harus disiapkan terpisah. Secret tidak disimpan pada script atau source control. Private key decrypt disimpan terpisah dari server produksi.
 
-Verifikasi upload saja bukan restore drill. Uji decrypt, checksum, `pg_restore` ke lingkungan terisolasi, row count, constraint, login, snapshot, dan laporan; ukur RPO/RTO sesuai PRD. Cadangan lokal sebelum migrasi tersedia di `.runtime/before-directory-import.dump`; belum ada backup offsite atau restore drill.
+Verifikasi upload saja bukan restore drill. Uji decrypt, checksum, `pg_restore` ke lingkungan terisolasi, row count, constraint, login, snapshot, dan laporan; ukur RPO/RTO sesuai PRD. Cadangan lokal sebelum migrasi tersedia di `.runtime/before-directory-import.dump`; pada saat awal penyiapan belum ada backup offsite atau restore drill. Keduanya telah diselesaikan pada 30 September 2026; gunakan runbook BACKUP_GOOGLE_DRIVE.md dan BACKUP_PROJECT.md.
 
 ## Lingkungan lokal yang sudah disiapkan
 

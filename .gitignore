@@ -29,3 +29,8 @@ auth.json
 # Application schemas and permission scripts contain no personnel records or credentials.
 !resources/js/domain/personnel-schema.json
 !infra/docker/runtime-grants.sql
+
+# Generated review images, caches and temporary document renders
+tmp/
+__pycache__/
+*.py[cod]

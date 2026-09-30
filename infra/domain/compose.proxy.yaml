@@ -1,0 +1,11 @@
+# VPS-only overlay. Attach web, never app/db, to the office edge network.
+# docker compose -f infra/compose.yaml -f infra/domain/compose.proxy.yaml up -d --no-deps web
+services:
+  web:
+    networks:
+      edge:
+        aliases: [nadi-asn-edge]
+networks:
+  edge:
+    external: true
+    name: proxy

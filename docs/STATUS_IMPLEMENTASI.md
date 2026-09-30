@@ -1,5 +1,7 @@
 # Status implementasi — 14 September 2026
 
+> **Status terkini — 30 September 2026:** produksi publik aktif di https://nadiasndpmptspsulteng.online. Domain/TLS, SMTP, backup Google Drive, restore terisolasi, pemantauan lima menit dan UAT pemilik akun telah diselesaikan. VPS menjadi sumber utama. Lihat [catatan rilis](operations/LAUNCH_2026-09-30.md) dan [monitor](operations/MONITORING.md). Bagian bertanggal September sebelumnya adalah histori, bukan status operasional terbaru. Monitor eksternal untuk VPS mati total masih perlu ditambahkan.
+
 > **Pembaruan 15 September 2026:** DUK kembali mengikuti data sumber dan diatur manual oleh Super Admin. Sidebar dapat diminimalkan; tabel memiliki 10/30/50/All; urutan Excel mengikuti DUK; kategori Unit kerja berada di atas tabel PDF. Manajemen akun Admin tersedia di Pengaturan. Super Admin dapat menyetujui usulan sendiri. Kebijakan ini menggantikan hierarki otomatis dan syarat pemeriksa berbeda sebelumnya.
 
 Permintaan revisi pengguna 14 September menggantikan kebutuhan lama untuk peran Pimpinan dan penyembunyian kelompok agregat kecil. Dokumen PRD dan Stage 1 asli tidak diubah.
