@@ -1,5 +1,7 @@
 # Pemantauan NADI ASN
 
+Diverifikasi 5 Oktober 2026: 21 pemeriksaan sehat. Statistik pengunjung memakai heartbeat terpisah dan tidak memperpanjang sesi login; GET pemeriksaan/health probe tidak menambah kunjungan.
+
 ## Operasi aktif
 
 Cron pengguna anggauser menjalankan `infra/monitor/check.py` setiap lima menit, dengan lock untuk mencegah proses tumpang tindih. Konfigurasi privat berada di `.deploy/monitor/config.json`, status terakhir di `status.json`, log berotasi di `monitor.log`. Email gangguan dan pemulihan dikirim ke alamat yang disetujui pengelola: restu.angga.jf@gmail.com. Uji SMTP telah diterima layanan pengiriman.

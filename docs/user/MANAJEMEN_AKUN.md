@@ -1,6 +1,6 @@
 # Manajemen Akun — Super Admin
 
-Buka **Pengaturan → Manajemen Akun** pada aplikasi utama (port 5173).
+Buka **Pengaturan → Manajemen Akun** pada https://nadiasndpmptspsulteng.online. Edisi 5 Oktober 2026.
 
 1. Cari dan pilih pegawai aktif dari Master Pegawai.
 2. Level akses ditetapkan sebagai **Admin Kepegawaian**. Klik **Buat akun & tautan**.
@@ -16,7 +16,7 @@ Tidak ada batas satu Admin: ulangi langkah tersebut untuk pegawai lain. Pegawai 
 - **Nonaktifkan** segera membatalkan akses dan tautan aktivasi. Data pegawai serta riwayat kerja tidak dihapus. Untuk memberi akses kembali, buat tautan aktivasi baru pada akun yang sama.
 - Status: **Aktif**, **Menunggu aktivasi**, **Tautan kedaluwarsa**, atau **Nonaktif**.
 
-Manajemen akun hanya tersedia bagi Super Admin di backend utama. Simulasi tidak membuat akun yang dapat membaca data asli. Tautan di alamat 127.0.0.1 hanya dapat digunakan pada komputer yang menjalankan aplikasi; akses lintas perangkat memerlukan alamat hosting/LAN aplikasi yang memang sudah disiapkan.
+Manajemen akun hanya tersedia bagi Super Admin di backend utama. Simulasi tidak membuat akun yang dapat membaca data asli. Tautan produksi menggunakan domain HTTPS utama. Tautan 127.0.0.1 dari lingkungan latihan bukan tautan akun produksi.
 
 ## Pemulihan Super Admin melalui email
 
@@ -24,4 +24,4 @@ Pada Login, klik **Lupa kata sandi atau kehilangan OTP?**, pilih **Super Admin**
 
 Untuk **Admin Kepegawaian**, halaman hanya mengarahkan agar menghubungi Super Admin. Reset dilakukan melalui Manajemen Akun seperti langkah di atas.
 
-Pengiriman sungguhan belum aktif pada lingkungan lokal per 16 September 2026 karena email pengirim/SMTP belum diisi. Aplikasi menampilkan pesan bahwa pengiriman belum dikonfigurasi, bukan mengklaim email terkirim. Lihat [konfigurasi email](../operations/SETUP.md#email-pemulihan-super-admin).
+SMTP produksi aktif sejak 30 September 2026 dan pemulihan telah dikonfirmasi pemilik akun. Bila pengiriman gagal, periksa inbox/spam dan hubungi pengelola untuk memeriksa SMTP; kredensial aktif tidak dibatalkan oleh kegagalan kirim. Lihat [konfigurasi email](../operations/SETUP.md#email-pemulihan-super-admin).

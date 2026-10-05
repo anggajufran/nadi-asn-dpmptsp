@@ -1,12 +1,12 @@
 # Dokumentasi Teknis Sistem dan Panduan Serah Terima NADI ASN
 
-DPMPTSP Prov. Sulawesi Tengah | Edisi 1.0 | 29 September 2026
+DPMPTSP Prov. Sulawesi Tengah | Edisi 2.0 | 5 Oktober 2026
 
-Baseline: `5b1b70ae786ec4384614cebd41b50041cc1979df`. Distribusi internal.
+Baseline: `f03ce2f9581af83325d8b9fb2bbc99b45983ab0c`. Distribusi internal.
 
 ## Identitas dokumen & batas bukti
 
-Dokumentasi Teknis Sistem dan Panduan Serah Terima NADI ASN.
+Panduan sistem aktif untuk pengembang, DBA, operator dan penerus pengelola.
 
 *Bab 01 / Orientasi; halaman PDF 2.*
 
@@ -14,22 +14,22 @@ Dokumentasi Teknis Sistem dan Panduan Serah Terima NADI ASN.
 | --- | --- |
 | Pemilik sistem | DPMPTSP Prov. Sulawesi Tengah |
 | Produk | NADI ASN - Navigasi dan Analitik Data Internal ASN |
-| Versi dokumen | 1.0 / 29 September 2026 |
-| Baseline kode | 5b1b70ae786ec4384614cebd41b50041cc1979df |
-| Versi paket / aturan Radar | 0.1.0 / 2026-09-22.1 |
-| Pembaca | Pengembang frontend/backend, DBA, operator VPS, tim keamanan dan penerus pengelola. |
-| Klasifikasi | Internal. Tidak memuat password, token, kunci enkripsi, NIP atau database pegawai nyata. |
+| Edisi / tanggal | 2.0 / 5 Oktober 2026 |
+| Baseline aplikasi | f03ce2f9581af83325d8b9fb2bbc99b45983ab0c |
+| Paket / aturan Radar | 0.1.0 / 2026-09-22.1 |
+| Produksi | https://nadiasndpmptspsulteng.online |
+| Klasifikasi | Internal; tanpa rahasia, identitas pegawai nyata atau database produksi. |
 
-### Apa yang menjadi dasar
+### Tujuan dan acuan
 
-Perilaku aktif ditelusuri dari kode, route, konfigurasi dan migrasi pada baseline di atas. Status pemasangan dan hasil pengujian mengacu pada catatan operasional 28 September 2026. Penyusunan dokumen ini tidak melakukan audit keamanan ulang, pengujian beban, atau perubahan VPS.
+Dokumen menjelaskan arsitektur, kontrak data/API, kontrol akses, deployment, backup dan respons gangguan. Kode aktif menjadi acuan perilaku; bukti bertanggal menjelaskan pemeriksaan yang benar-benar dilakukan. Buku pengguna edisi 2 melengkapi tutorial operasional petugas.
 
-> **Tiga label yang harus dibedakan**
-> AKTIF = tersedia dalam kode. TERCATAT = pernah diverifikasi pada tanggal bukti. BELUM = memerlukan pekerjaan atau pengujian lanjutan. Keberadaan kelas atau tabel tidak selalu berarti tersedia sebagai fitur melalui API.
+> **Implementasi, bukti dan rencana**
+> AKTIF = jalur tersedia pada implementasi. TERVERIFIKASI = diperiksa pada tanggal bukti. BELUM = pekerjaan/validasi tambahan. Pembaruan dokumentasi tidak dianggap sebagai pentest, audit dependency baru, load test atau restore aplikasi penuh.
 
-Dokumen ini melengkapi Buku Panduan Penggunaan 36 halaman. Simpan versi Markdown bersama kode; perbarui dokumen ketika route, skema, aturan, atau prosedur operasi berubah.
+Edisi ini menggantikan kondisi buku 29 September yang belum memiliki domain dan SMTP. Produksi, sumber utama VPS, backup Drive serta pemantauan aktif sejak 30 September; statistik pengunjung aktif sejak 5 Oktober. PRD/Stage 1 tetap menjadi rancangan awal.
 
-Sumber: `package.json`, `composer.json`, `docs/operations/SECURITY_REVIEW_2026-09-28.md`.
+Sumber: `docs/README.md`, `docs/operations/STATUS_OPERASIONAL.md`, `docs/VALIDASI.md`.
 
 ## Daftar isi
 
@@ -53,35 +53,37 @@ Klik judul bab atau gunakan bookmark pada pembaca PDF.
 - 17. Kamus data: identitas akses
 - 18. Kamus data: perubahan & audit
 - 19. Kamus data: impor & laporan
-- 20. Infrastruktur data & komponen lama
-- 21. Proyeksi data, waktu & kualitas
-- 22. Transaksi perubahan pegawai
-- 23. DUK manual & unit organisasi
-- 24. Pipeline impor XLSX
-- 25. Pipeline laporan & statistik
-- 26. Mesin aturan KP & KGB
-- 27. Radar: data, revisi & pengingat
-- 28. Konvensi API & respons error
-- 29. API publik, sesi & aktivasi
-- 30. API pegawai, persetujuan & DUK
-- 31. API impor & ekspor
-- 32. API akun, unit & Radar
-- 33. Contoh payload & kontrak perubahan
-- 34. Keamanan: kontrol 1-10
-- 35. Keamanan: kontrol 11-20
-- 36. Konfigurasi & pengelolaan secret
-- 37. Menyiapkan pengembangan lokal
-- 38. Pengujian & penerimaan perubahan
-- 39. VPS privat: akses & pemeriksaan
-- 40. Runbook rilis & migrasi
-- 41. Domain, HTTPS & SMTP
-- 42. Pemantauan & tugas rutin
-- 43. Strategi backup & retensi
-- 44. Runbook pemulihan bencana
-- 45. Troubleshooting & respons insiden
-- 46. Kapasitas, batas & backlog teknis
-- 47. Checklist serah terima tim IT
-- 48. Indeks sumber & istilah teknis
+- 20. Statistik pengunjung dan penyimpanan
+- 21. Infrastruktur data & komponen lama
+- 22. Proyeksi data, waktu & kualitas
+- 23. Transaksi perubahan pegawai
+- 24. DUK manual & unit organisasi
+- 25. Pipeline impor XLSX
+- 26. Pipeline laporan & statistik
+- 27. Mesin aturan KP & KGB
+- 28. Radar: data, revisi & pengingat
+- 29. Konvensi API & respons error
+- 30. API publik, sesi & aktivasi
+- 31. API dan frontend statistik pengunjung
+- 32. API pegawai, persetujuan & DUK
+- 33. API impor & ekspor
+- 34. API akun, unit & Radar
+- 35. Contoh payload & kontrak perubahan
+- 36. Keamanan: kontrol 1-10
+- 37. Keamanan: kontrol 11-20
+- 38. Konfigurasi & pengelolaan secret
+- 39. Menyiapkan pengembangan lokal
+- 40. Pengujian & penerimaan perubahan
+- 41. VPS privat: akses & pemeriksaan
+- 42. Runbook rilis & migrasi
+- 43. Domain, HTTPS & SMTP
+- 44. Pemantauan & tugas rutin
+- 45. Strategi backup & retensi
+- 46. Runbook pemulihan bencana
+- 47. Troubleshooting & respons insiden
+- 48. Kapasitas, batas & backlog teknis
+- 49. Checklist serah terima tim IT
+- 50. Indeks sumber & istilah teknis
 
 ## Tujuan, lingkup & pengguna
 
@@ -128,7 +130,7 @@ Revisi kebutuhan setelah PRD/Stage 1 menjadi acuan perilaku aplikasi saat ini.
 | Data sumber | Masa kerja PDF adalah masa kerja keseluruhan beracuan September 2026; bukan MKG. |
 | Penyajian | Tema awal light, tema dark tersimpan di browser; filter jenis jabatan; pilihan 10/30/50/All. |
 | Pelaporan | Urutan Excel mengikuti DUK; Unit kerja muncul lebih awal pada PDF; kredit developer tidak dimasukkan dalam laporan. |
-| Hosting | Enam layanan sudah tercatat dipasang privat di VPS; domain publik dan SMTP belum siap. |
+| Hosting | Domain HTTPS publik aktif, enam service terisolasi, SMTP, backup terenkripsi dan monitor host aktif. |
 
 > **Dokumen historis bukan spesifikasi tunggal**
 > PRD, Stage 1, STATUS_IMPLEMENTASI dan VALIDASI memiliki bagian lama. Jika bertentangan, periksa revisi kebutuhan, route aktif, kode dan bukti operasional terbaru. Jangan mengaktifkan kembali fitur lama hanya karena tabelnya masih ada.
@@ -145,14 +147,15 @@ Modular monolith: satu backend Laravel, dibagi menurut domain; bukan kumpulan mi
 
 ```mermaid
 flowchart LR
- Browser --> Nginx
+ Browser --> NPM[Proxy TLS domain]
+ NPM --> Nginx
  Nginx --> SPA[Vue build dist]
  Nginx --> Laravel
  Laravel --> PostgreSQL
  Worker --> PostgreSQL
  Scheduler --> PostgreSQL
  Laravel --> ClamAV
- Laravel --> SMTP[SMTP - belum aktif]
+ Laravel --> SMTP[SMTP pemulihan aktif]
  Laravel --> Storage[Storage privat]
  Worker --> Storage
 ```
@@ -187,6 +190,8 @@ Web menjadi pintu masuk; service internal tidak dipublikasikan langsung ke host.
 
 Network **backend** bertipe internal. Network **outbound** dipakai web/app/worker/scheduler/antivirus untuk kebutuhan keluar. DB hanya bergabung dengan backend. Tidak ada published port untuk DB, ClamAV atau PHP-FPM.
 
+Nginx Proxy Manager kantor melakukan TLS domain, redirect HTTP/www dan proxy menuju alias **nadi-asn-edge:8443**. Hanya service web ikut jaringan external **proxy** melalui overlay compose.proxy.yaml. App/DB tidak ikut edge. Proxy memverifikasi sertifikat upstream dengan CA privat dan nama localhost; Laravel hanya mempercayai IP NPM aktual.
+
 ### Data persisten
 
 Volume Compose: **database**, **private_files**, **app_logs**, **signatures**. Konfigurasi TLS dipasang read-only dari .deploy/tls. Owner DB password hanya dipasang pada container db melalui Docker secret.
@@ -194,7 +199,7 @@ Volume Compose: **database**, **private_files**, **app_logs**, **signatures**. K
 > **Kapasitas perlu diukur**
 > Batas RAM di Compose adalah limit per service, bukan hasil sizing atau jaminan konsumsi. Total limit sekitar 5,6 GiB di luar OS dan aplikasi kantor lain. Periksa headroom dan OOM sebelum menambah beban.
 
-Sumber: `infra/compose.yaml`, `infra/nginx/default.conf`, `infra/docker/clamd.conf`.
+Sumber: `infra/compose.yaml`, `infra/nginx/default.conf`, `infra/docker/clamd.conf`, `infra/domain/compose.proxy.yaml`, `infra/domain/nadi-domain-public.conf`.
 
 ## Teknologi & dependensi
 
@@ -234,7 +239,7 @@ Mulai dari route dan entry point, lalu ikuti controller, service, model dan peng
 | app/Modules/ | Domain IdentityAccess, Personnel, Governance, Duk, Radar, Imports, SnapshotsReports, Analytics, References, Rules dan Audit. |
 | app/Shared/ | Audit append dan canonical JSON/hash. |
 | routes/ | web.php: sesi/CSRF; api_public.php; api_internal.php; console.php; provisioning lokal. |
-| database/migrations/ | Sebelas migrasi domain/infrastruktur. PostgreSQL diperlukan oleh SQL khususnya. |
+| database/migrations/ | Dua belas migrasi domain/infrastruktur. PostgreSQL diperlukan oleh SQL khususnya. |
 | resources/views/ | Template PDF statistik dan email pemulihan. |
 | scripts/ | Server/fixture demo, ekstraksi PDF sumber, kalkulator Radar demo dan pemeriksaan sintaks PHP. |
 | infra/ | Docker, Compose, Nginx, grant DB dan contoh backup. |
@@ -319,7 +324,7 @@ Tautan aktivasi dan tautan pemulihan memakai alur akhir yang sama, tetapi dampak
 
 - Perubahan NIP/nama di Master tidak otomatis menyinkronkan login_name/nama akun. Perlakukan koreksi identitas login sebagai pekerjaan pengelola yang diverifikasi.
 
-> **Pengiriman email belum operasional**
+> **Pengiriman email produksi aktif**
 > RecoveryController mengirim email sinkron di dalam transaksi. SMTP gagal -> token baru di-rollback dan respons 503. Keberhasilan mail fake di tes bukan bukti pengiriman SMTP nyata.
 
 Sumber: `app/Modules/IdentityAccess/Http/AccountController.php`, `app/Modules/IdentityAccess/Http/ActivationController.php`, `app/Modules/IdentityAccess/Http/RecoveryController.php`.
@@ -525,11 +530,37 @@ Laporan READY memperoleh expiry tujuh hari dari waktu render. Endpoint unduh mem
 
 Sumber: `database/migrations/2026_09_11_000003_create_rules_imports_and_publication.php`, `database/migrations/2026_09_12_000004_extend_import_workflow.php`, `app/Modules/Imports/Services/ImportService.php`.
 
+## Statistik pengunjung dan penyimpanan
+
+Tujuh metrik website yang tidak mengidentifikasi pegawai atau akun.
+
+*Bab 06 / Data; halaman PDF 20.*
+
+**Browser**: Cookie UUID acak → **Heartbeat**: Terlihat setiap menit → **Deduplikasi**: HMAC harian → **Agregat**: Jumlah per tanggal
+
+| Tabel | Struktur dan retensi |
+| --- | --- |
+| visitor_daily_totals | visit_date date PK; visitors bigint. Agregat kumulatif tanpa identifier browser. Tetap disimpan untuk semua periode. |
+| visitor_presences | PK visit_date + daily_hash char(64); online_hash char(64); last_seen timestamptz berindeks. HMAC memakai APP_KEY. Prune hourly mempertahankan hari ini dan kemarin. |
+
+### Definisi waktu dan angka
+
+WITA Asia/Makassar. Hari ini/kemarin: browser unik per tanggal. Minggu mulai Senin; bulan mulai tanggal 1; tahun mulai 1 Januari. Periode dan total adalah penjumlahan unik harian, bukan individu unik sepanjang periode. Online adalah distinct online_hash yang aktif dalam lima menit, termasuk deduplikasi lintas tengah malam.
+
+### Konsistensi dan privasi
+
+insertOrIgnore presence dan atomic UPSERT totals dalam transaksi membuat tab bersamaan tidak menggandakan harian. Reload memperbarui last_seen. Tabel tidak menyimpan IP, User-Agent, akun, nama, NIP atau URL. GET hanya membaca dan tidak menambah jumlah; bot umum dilewati berdasarkan User-Agent.
+
+> **Sumber angka**
+> Produksi mulai 5 Oktober 2026 tanpa rekonstruksi sebelumnya. Cookie terhapus/browser lain dapat dihitung baru; online merupakan perkiraan. Presence dalam backup mengikuti retensi backup, walau tabel aktif telah dipangkas. TrackingSince adalah tanggal pertama aktivitas tercatat.
+
+Sumber: `database/migrations/2026_10_01_000012_create_visitor_statistics.php`, `app/Modules/Analytics/Services/VisitorStatistics.php`, `routes/console.php`.
+
 ## Infrastruktur data & komponen lama
 
 Katalog ini mencegah salah tafsir bahwa semua tabel memiliki menu atau API aktif.
 
-*Bab 06 / Data; halaman PDF 20.*
+*Bab 06 / Data; halaman PDF 21.*
 
 | Tabel / komponen | Status dan kegunaan |
 | --- | --- |
@@ -545,7 +576,7 @@ Katalog ini mencegah salah tafsir bahwa semua tabel memiliki menu atau API aktif
 > **Jangan membuka route lama tanpa review**
 > DukController, DukRanking dan cabang renderer kind=duk masih ada. routes/api_internal.php aktif memakai ManualDukController; POST exports hanya menerima employees/statistics. Constraint publisher!=maker pada tabel publikasi lama tidak sama dengan kebijakan self-approval change request.
 
-Sebelas migrasi tersusun dari 000001 sampai 000011. Beberapa down() sengaja menolak rollback karena membawa histori/kebijakan. Gunakan migrasi lanjutan yang ditinjau; jangan mengandalkan migrate:rollback untuk memulihkan produksi.
+Dua belas migrasi tersusun dari 000001 sampai 000012. Beberapa down() sengaja menolak rollback karena membawa histori/kebijakan. Gunakan migrasi lanjutan yang ditinjau; jangan mengandalkan migrate:rollback untuk memulihkan produksi.
 
 Sumber: `database/migrations/`, `routes/api_internal.php`, `app/Modules/Duk/Http/DukController.php`, `app/Modules/SnapshotsReports/Jobs/RenderExport.php`.
 
@@ -553,7 +584,7 @@ Sumber: `database/migrations/`, `routes/api_internal.php`, `app/Modules/Duk/Http
 
 Nilai tampilan dapat berubah mengikuti tanggal tanpa menulis ulang semua record database.
 
-*Bab 07 / Aturan bisnis; halaman PDF 21.*
+*Bab 07 / Aturan bisnis; halaman PDF 22.*
 
 ### Masa kerja keseluruhan
 
@@ -588,7 +619,7 @@ Sumber: `app/Modules/Personnel/Services/PersonnelClock.php`, `app/Modules/Person
 
 Data resmi hanya berubah ketika proposal APPROVED berhasil diterapkan.
 
-*Bab 07 / Aturan bisnis; halaman PDF 22.*
+*Bab 07 / Aturan bisnis; halaman PDF 23.*
 
 **Submit**: revision + changes → **PENDING**: before + hash → **Decide**: Role + lock → **Apply**: Histori + audit
 
@@ -617,7 +648,7 @@ Sumber: `app/Modules/Governance/Http/ChangeController.php`, `app/Modules/Governa
 
 Urutan pegawai dan urutan unit adalah dua konsep yang berbeda.
 
-*Bab 07 / Aturan bisnis; halaman PDF 23.*
+*Bab 07 / Aturan bisnis; halaman PDF 24.*
 
 ### Kontrak urutan DUK
 
@@ -644,7 +675,7 @@ Sumber: `app/Modules/Duk/Http/ManualDukController.php`, `app/Modules/Personnel/M
 
 Upload, validasi preview dan konfirmasi adalah tahap berbeda dengan hak pemilik.
 
-*Bab 07 / Aturan bisnis; halaman PDF 24.*
+*Bab 07 / Aturan bisnis; halaman PDF 25.*
 
 **UPLOADED**: Scan + staging → **VALIDATING**: Worker → **PREVIEW**: VALID / INVALID → **CONFIRMED**: Usulan dibuat
 
@@ -668,7 +699,7 @@ Sumber: `app/Modules/Imports/Services/ImportService.php`, `app/Modules/Imports/J
 
 Input laporan dibekukan ketika permintaan dibuat, bukan ketika worker mulai merender.
 
-*Bab 07 / Aturan bisnis; halaman PDF 25.*
+*Bab 07 / Aturan bisnis; halaman PDF 26.*
 
 **Request**: Super Admin → **QUEUED**: Salinan parameter → **Render**: XLSX / PDF → **READY**: Unduh 7 hari
 
@@ -695,7 +726,7 @@ Sumber: `app/Modules/SnapshotsReports/Http/ExportController.php`, `app/Modules/S
 
 Kalkulator PHP menjadi acuan pemeriksaan administrasi versi 2026-09-22.1.
 
-*Bab 07 / Aturan bisnis; halaman PDF 26.*
+*Bab 07 / Aturan bisnis; halaman PDF 27.*
 
 | Jalur | Aturan utama yang diterapkan |
 | --- | --- |
@@ -717,7 +748,7 @@ Sumber: `app/Modules/Radar/Services/RadarCalculator.php`, `NADI-ASN-Rules-KP dan
 
 Kesiapan administratif berbeda dari status proses usulan.
 
-*Bab 07 / Aturan bisnis; halaman PDF 27.*
+*Bab 07 / Aturan bisnis; halaman PDF 28.*
 
 | Kelompok data JSON | Field |
 | --- | --- |
@@ -744,7 +775,7 @@ Sumber: `app/Modules/Radar/Http/RadarController.php`, `app/Modules/Radar/Service
 
 Base URL /api. Endpoint browser memakai session cookie Laravel dan CSRF, bukan bearer token.
 
-*Bab 08 / API; halaman PDF 28.*
+*Bab 08 / API; halaman PDF 29.*
 
 | Aspek | Kontrak |
 | --- | --- |
@@ -772,7 +803,7 @@ Sumber: `routes/web.php`, `bootstrap/app.php`, `resources/js/api/client.ts`.
 
 P = tanpa login internal, tetapi POST tetap memerlukan CSRF. Semua path di bawah relatif terhadap /api.
 
-*Bab 08 / API; halaman PDF 29.*
+*Bab 08 / API; halaman PDF 30.*
 
 | Metode / path | Input utama -> hasil |
 | --- | --- |
@@ -794,13 +825,47 @@ Login/TOTP/aktivasi: 5 per menit per IP serta 30 per jam per identitas input + I
 > **Jangan log header aktivasi**
 > Secret enrollment dikembalikan hanya setelah token valid. Jangan merekam X-Activation-Token, isi respons aktivasi, body password atau URL fragment ke telemetry/screenshot. Token fragment tidak ikut request URL HTTP, lalu dikirim sebagai header oleh client.
 
+Endpoint agregat GET public/visitors serta POST public/visitors/heartbeat adalah pengecualian stateless yang dijelaskan pada halaman berikut. Route akun/pegawai tetap memiliki perlindungan sesi dan CSRF; jangan menyebarkan pengecualian ini ke endpoint privat.
+
 Sumber: `routes/web.php`, `routes/api_public.php`, `app/Providers/AppServiceProvider.php`, `app/Modules/Analytics/Http/DashboardController.php`.
+
+## API dan frontend statistik pengunjung
+
+Stateless khusus penghitung publik agar heartbeat tidak memperpanjang idle login.
+
+*Bab 08 / API; halaman PDF 31.*
+
+| Endpoint | Kontrak |
+| --- | --- |
+| GET /api/public/visitors | Agregat saja; throttle public 60/min/IP, no-store; tidak membuat session cookie dan tidak menambah kunjungan. |
+| POST /api/public/visitors/heartbeat | Body kosong/{} tanpa query personal; exact Origin frontend wajib; throttle visitors 120/min/IP, no-store. Balas agregat. |
+
+### Cookie dan perlindungan
+
+nadi_visitor UUID acak, dienkripsi Laravel, Secure produksi, HttpOnly, SameSite Strict, maksimum satu tahun. StartSession, ShareErrorsFromSession dan PreventRequestForgery dikecualikan hanya pada dua route ini. Enkripsi cookie dan security headers tetap aktif. Origin asing/hilang ditolak 403, payload tambahan 422. Browser tidak dapat mengganti Origin ke situs lain.
+
+### Data respons
+
+```text
+{ "today": 1, "yesterday": 0, "week": 1, "month": 1,
+  "year": 1, "total": 1, "online": 1,
+  "trackingSince": "2026-10-05", "timezone": "Asia/Makassar",
+  "updatedAt": "2026-10-05T08:23:00+08:00",
+  "onlineWindowMinutes": 5, "demo": false }
+```
+
+Contoh ilustratif. App.vue memasang useVisitorTracking sekali, mengirim tiap 60 detik saat document terlihat, menghindari request tumpang tindih, dan membersihkan timer/listener saat unmount. VisitorStats menampilkan tujuh kartu di portal/Command Center; filter pegawai tidak menyaring pengunjung.
+
+> **Kegagalan dan simulasi**
+> Awal data ditampilkan sebagai garis; kegagalan menghasilkan Pembaruan tertunda, bukan angka nol palsu. Simulasi menggunakan angka contoh dengan demo=true. Cookie/account auth tidak dibaca atau diperbarui oleh heartbeat, termasuk ketika admin sedang login.
+
+Sumber: `routes/api_public.php`, `app/Modules/Analytics/Http/VisitorController.php`, `resources/js/api/visitors.ts`, `resources/js/components/VisitorStats.vue`.
 
 ## API pegawai, persetujuan & DUK
 
 A/S = Admin dan Super Admin. S = Super Admin. Semua endpoint membutuhkan sesi penuh.
 
-*Bab 08 / API; halaman PDF 30.*
+*Bab 08 / API; halaman PDF 32.*
 
 | Metode / path / akses | Kontrak ringkas |
 | --- | --- |
@@ -826,7 +891,7 @@ Sumber: `routes/api_internal.php`, `app/Modules/Personnel/Http/EmployeeControlle
 
 Hak berkas dibatasi pemilik, bukan hanya UUID yang sulit ditebak.
 
-*Bab 08 / API; halaman PDF 31.*
+*Bab 08 / API; halaman PDF 33.*
 
 | Metode / path | Input -> hasil / akses |
 | --- | --- |
@@ -857,7 +922,7 @@ Sumber: `app/Modules/Imports/Http/ImportController.php`, `app/Modules/Imports/Se
 
 Kontrol administrasi ditetapkan server; client tidak boleh memilih role arbitrer.
 
-*Bab 08 / API; halaman PDF 32.*
+*Bab 08 / API; halaman PDF 34.*
 
 | Metode / path / akses | Input -> hasil |
 | --- | --- |
@@ -887,7 +952,7 @@ Sumber: `app/Modules/IdentityAccess/Http/AccountController.php`, `app/Modules/Re
 
 Contoh sintetis untuk pengembang; ID dan revisi harus diperoleh dari lingkungan uji.
 
-*Bab 08 / API; halaman PDF 33.*
+*Bab 08 / API; halaman PDF 35.*
 
 ### Usulan koreksi nama jabatan
 
@@ -934,7 +999,7 @@ Sumber: `routes/api_internal.php`, `resources/js/api/client.ts`, `app/Modules/Go
 
 Ringkasan kontrol yang tercatat pada audit 28 September 2026, disertai lokasi implementasi.
 
-*Bab 09 / Keamanan; halaman PDF 34.*
+*Bab 09 / Keamanan; halaman PDF 36.*
 
 | No. / pemeriksaan | Kontrol dan pemeliharaan |
 | --- | --- |
@@ -960,7 +1025,7 @@ Sumber: `docs/operations/SECURITY_REVIEW_2026-09-28.md`, `infra/nginx/security-h
 
 Pemindaian unggahan dan sesi harus tetap berjalan saat sistem dibuka untuk umum.
 
-*Bab 09 / Keamanan; halaman PDF 35.*
+*Bab 09 / Keamanan; halaman PDF 37.*
 
 | No. / pemeriksaan | Kontrol dan batas |
 | --- | --- |
@@ -971,7 +1036,7 @@ Pemindaian unggahan dan sesi harus tetap berjalan saat sistem dibuka untuk umum.
 | 15. DB least privilege | nadi_runtime bukan owner/superuser/DDL; hak audit/snapshot dibatasi; grant diulang setelah migrasi. |
 | 16. Password hash | Hash Laravel; secret TOTP terenkripsi memakai kunci terpisah. |
 | 17. Session | Secure, HttpOnly, SameSite Strict, terenkripsi; idle 30 menit/absolut 8 jam; CSRF dan rate limiter. |
-| 18. Reset aman | Token acak/hash, expiry dan sekali pakai, MFA baru; SMTP riil belum aktif. |
+| 18. Reset aman | Token acak/hash, expiry dan sekali pakai, MFA baru; SMTP pemulihan produksi aktif dan telah diuji. |
 | 19. Batas upload | XLSX 5 MiB; Nginx request 6 MiB; satu sheet/1.000 baris/50 kolom/2.000 ZIP entries/25 MiB terurai. |
 | 20. Antivirus | ClamAV INSTREAM sebelum parser; infeksi 422, scanner gagal 503. Production tidak boleh bypass scan. |
 
@@ -986,7 +1051,7 @@ Sumber: `app/Modules/Imports/Services/UploadScanner.php`, `app/Modules/Imports/S
 
 Nilai rahasia tidak dicantumkan. .env.example adalah daftar struktur, bukan konfigurasi siap produksi.
 
-*Bab 10 / Konfigurasi; halaman PDF 36.*
+*Bab 10 / Konfigurasi; halaman PDF 38.*
 
 | Variabel / kelompok | Fungsi dan nilai yang diharapkan |
 | --- | --- |
@@ -1013,7 +1078,7 @@ Sumber: `.env.example`, `config/nadi.php`, `config/session.php`, `config/trusted
 
 Lakukan pada clone dan database development terpisah, bukan database operasional.
 
-*Bab 11 / Pengembangan; halaman PDF 37.*
+*Bab 11 / Pengembangan; halaman PDF 39.*
 
 ### Prasyarat dan instalasi baru
 
@@ -1053,196 +1118,183 @@ Sumber: `docs/operations/SETUP.md`, `package.json`, `vite.config.ts`, `routes/co
 
 ## Pengujian & penerimaan perubahan
 
-Gunakan PostgreSQL testing khusus. Jangan menjalankan suite pada database produksi.
+Bukti rilis 5 Oktober 2026; suite selalu memakai PostgreSQL testing terpisah.
 
-*Bab 11 / Pengembangan; halaman PDF 38.*
-
-### Perintah verifikasi
+*Bab 11 / Pengembangan; halaman PDF 40.*
 
 ```text
 npm test
 npm run build
 npm run check:php
-# Setelah koneksi testing dan izin migrasi disiapkan:
+# Database testing, bukan produksi:
 APP_ENV=testing DB_DATABASE=nadi_testing php artisan migrate --force
 php vendor/bin/phpunit
 ```
 
-| Area | Bukti / cakupan |
+| Verifikasi | Hasil / cakupan |
 | --- | --- |
-| PHPUnit | phpunit.xml memaksa APP_ENV testing dan DB_DATABASE nadi_testing. Tes meliputi auth, recovery, role, proposal, impor, DUK, export, Radar, waktu, upload dan HTTP security. |
-| Vitest | Unit privacy dan API demo terisolasi; server tes 5174. Tidak menguji DB Laravel asli. |
-| Build | vue-tsc --noEmit lalu Vite. Waspadai chunk ExcelJS besar; dimuat dinamis. |
-| Bukti 28 Sep 2026 | 77 tes backend / 375 assertion, 17 tes frontend, build lokal dan Docker berhasil; npm/Composer audit tanpa advisory saat itu. |
-| Belum dibuktikan lengkap | Stress konkurensi/beban, aksesibilitas menyeluruh, UAT organisasi, SMTP nyata dan recovery offsite berkala. |
+| Backend | 85 tes / 424 assertion lulus; fitur pengunjung 8 tes / 49 assertion termasuk isolasi sesi. |
+| Frontend dan sintaks | 17 Vitest lulus; produksi build lulus; 95 file PHP tanpa kesalahan sintaks. Chunk ExcelJS tetap besar dan dimuat dinamis. |
+| Domain produksi | 26 pemeriksaan anonim dan 11 pemeriksaan endpoint pengunjung lulus. |
+| Runtime | 13 preflight lulus, 21 monitor sehat; fingerprint inti pegawai/akun/audit identik sebelum dan sesudah rilis. |
+| Operasi | Backup data/project diverifikasi melalui baca ulang pada 5 Oktober; restore DB terisolasi dan verifikasi arsip project pada 30 September. |
 
-### Kasus regresi minimum untuk rilis
+### Regresi minimum
 
-Login -> TOTP -> logout; Admin ditolak dari keputusan/akun/ekspor; Super Admin self-approval; konflik revision/hash; DUK dan Excel sama urutan; impor formula ditolak; umur/masa kerja pergantian tanggal; Radar setelah perubahan Master; unduhan expiry/owner; DTO publik tanpa identitas.
+Login/TOTP/logout; Admin ditolak dari keputusan/akun/ekspor; self-approval Super Admin; konflik revisi/hash; DUK dan Excel seurut; impor formula ditolak; umur/masa kerja pada batas tanggal; Radar setelah perubahan Master; owner/expiry unduhan; DTO publik tanpa identitas; heartbeat tidak memperpanjang idle login.
 
-> **Jangan campur bukti historis dan baru**
-> Angka tes di atas diambil dari laporan proyek, bukan dijalankan ulang untuk pembuatan dokumen ini. Pada rilis berikutnya simpan commit, konfigurasi uji, tanggal, hasil dan catatan kegagalan baru.
+> **Batas bukti**
+> Suite tidak dijalankan ulang hanya karena buku diterbitkan. Belum ada bukti stress beban/konkurensi menyeluruh, audit aksesibilitas lengkap, SLA atau RTO pemulihan aplikasi penuh yang disahkan. Audit dependency/security 28 September tetap bukti bertanggal.
 
-Sumber: `phpunit.xml`, `tests/Laravel/`, `tests/Feature/demo-api.test.ts`, `docs/operations/SECURITY_REVIEW_2026-09-28.md`.
+Sumber: `docs/VALIDASI.md`, `tests/Laravel/VisitorStatisticsTest.php`, `phpunit.xml`, `infra/monitor/public-check.py`.
 
 ## VPS privat: akses & pemeriksaan
 
-Status tercatat: Ubuntu 24.04 LTS, stack NADI ASN terisolasi; belum menjadi portal publik.
-
-*Bab 12 / Deployment; halaman PDF 39.*
-
-| Identitas operasi | Nilai / lokasi |
-| --- | --- |
-| Direktori / project Compose | /home/anggauser/nadi-asn / nadi-asn |
-| Endpoint host | 127.0.0.1:18443 HTTPS -> service web |
-| Konfigurasi | Root proyek .deploy/app.env; .deploy/db-owner-password; .deploy/tls/server.crt dan server.key. |
-| Kondisi layanan | Enam service tercatat berjalan; 19 container aplikasi kantor lain tidak diubah saat pemasangan. |
-| Domain / email | Domain belum ditetapkan; sertifikat localhost sementara. SMTP pemulihan belum tersedia. |
-
-### Akses operator melalui tunnel
-
-```text
-ssh -N -L 18443:127.0.0.1:18443 <operator>@<host-vps>
-# Browser: https://localhost:18443
-```
-
-Ganti placeholder dengan inventaris akses kantor. Detail host yang sudah disepakati tersedia di docs/operations/VPS_PRIVATE.md. Verifikasi sertifikat privat melalui SSH sebelum memberi pengecualian khusus localhost; jangan menonaktifkan validasi TLS global.
-
-### Pemeriksaan tanpa mengubah data
-
-```text
-cd /home/anggauser/nadi-asn
-docker compose -f infra/compose.yaml ps
-docker compose -f infra/compose.yaml exec app php artisan nadi:preflight
-curl --cacert .deploy/tls/server.crt https://localhost:18443/api/session
-```
-
-> **Tidak ada sinkronisasi lokal <-> VPS**
-> VPS membawa salinan data/akun, bukan database bersama. Tentukan sumber utama saat cutover dan rekonsiliasi perubahan sebelum perpindahan. Jangan restore menimpa data yang sudah diubah di VPS.
-
-Sumber: `docs/operations/VPS_PRIVATE.md`, `infra/compose.yaml`, `docs/operations/SECURITY_REVIEW_2026-09-28.md`.
-
-## Runbook rilis & migrasi
-
-Prosedur yang disarankan untuk rilis berikutnya; bukan perintah untuk dijalankan tanpa persiapan.
-
-*Bab 12 / Deployment; halaman PDF 40.*
-
-| Langkah | Tindakan dan bukti selesai |
-| --- | --- |
-| 1. Siapkan rilis | Tetapkan commit/tag, changelog, hasil tes dan kompatibilitas skema. Catat image sebelumnya serta inventaris service kantor. |
-| 2. Cadangkan | Backup DB, private_files dan konfigurasi/kunci privat; verifikasi pemulihan pada lingkungan terisolasi. |
-| 3. Hentikan penulisan | Umumkan jendela perubahan, kendalikan akses tulis dan drain/stop worker yang memproses mutasi. |
-| 4. Bangun image | docker compose -f infra/compose.yaml build. Tinjau .dockerignore dan kapasitas disk sebelum build. |
-| 5. Migrasi | Gunakan one-off proses migrasi dengan role owner yang disuplai privat. Runtime sengaja tidak punya DDL. Gunakan migrasi maju yang kompatibel. |
-| 6. Perbarui hak | Jalankan infra/docker/runtime-grants.sql sebagai owner setelah migrasi. Verifikasi owner tidak bocor ke app.env. |
-| 7. Jalankan service | docker compose -f infra/compose.yaml up -d. Recreate app/worker/scheduler agar memakai image dan env yang sama. |
-| 8. Verifikasi | Preflight, login/TOTP, hak Admin, statistik, usulan, Radar, impor bersih, render/unduh laporan, log dan audit. |
-| 9. Buka layanan | Simpan catatan rilis, waktu, operator dan hasil; pantau sesudah perubahan. |
-
-> **Rollback kode tidak sama dengan rollback data**
-> Jangan mengasumsikan down() semua migrasi tersedia. Image lama hanya aman jika kompatibel dengan skema kini. Restore DB adalah keputusan recovery yang dapat membuang transaksi setelah backup; dokumentasikan cut-off dan rekonsiliasi.
-
-Jangan menjalankan down -v, migrate:fresh atau reset database pada instalasi operasional. Batasi perintah restart/stop pada project/service NADI ASN agar container kantor lain tetap berjalan.
-
-Sumber: `infra/docker/Dockerfile`, `infra/docker/runtime-grants.sql`, `database/migrations/`, `docs/operations/SETUP.md`.
-
-## Domain, HTTPS & SMTP
-
-Tiga pekerjaan ini harus selesai sebelum peluncuran publik disetujui.
+Domain HTTPS adalah jalur pengguna; SSH dan endpoint privat hanya untuk operator.
 
 *Bab 12 / Deployment; halaman PDF 41.*
 
-### Domain dan reverse proxy
+| Identitas | Kondisi |
+| --- | --- |
+| Host / sistem | VPS Ubuntu 24.04 LTS; inventaris akses pada runbook VPS. |
+| Direktori / Compose | /home/anggauser/nadi-asn / nadi-asn |
+| Publik / endpoint host | Domain HTTPS utama; 127.0.0.1:18443 menuju web:8443. |
+| Runtime | Enam service. Domain melalui NPM; SMTP pemulihan aktif. |
+| Konfigurasi privat | .deploy/app.env; db-owner-password; TLS, monitor dan OAuth backup. Tidak masuk Git. |
+| Data utama | Database VPS; lokal lama read-only dan tidak tersinkron otomatis. |
 
-Tetapkan domain kantor, DNS dan sertifikat tepercaya. Buat virtual host khusus menuju NADI ASN, tanpa mengubah aplikasi lain. Tentukan APP_URL dan NADI_FRONTEND_URL pada host HTTPS yang sama. Isi NADI_TRUSTED_PROXIES hanya untuk IP proxy aktual; uji header scheme/client IP, cookie, CSRF dan rate limit dari luar.
-
-### SMTP pemulihan
+### Pemeriksaan dari VPS
 
 ```text
-MAIL_MAILER=smtp
-MAIL_HOST=<server-pengirim>
-MAIL_PORT=<port-penyedia>
-MAIL_SCHEME=<smtp-atau-smtps>
-MAIL_USERNAME=<akun-pengirim>
-MAIL_PASSWORD=<rahasia-disimpan-privat>
-MAIL_FROM_ADDRESS=<pengirim-diizinkan>
-NADI_RECOVERY_MAIL_ENABLED=true
+cd /home/anggauser/nadi-asn
+docker compose -f infra/compose.yaml \
+  -f infra/domain/compose.proxy.yaml ps
+docker exec nadi-asn-app-1 php artisan nadi:preflight
+python3 -B infra/monitor/check.py
 ```
 
-Alamat penerima Super Admin tersimpan di users.recovery_email, bukan otomatis pengirim SMTP. Gunakan skema/port TLS sesuai penyedia; jangan transport array untuk produksi. Kredensial tidak dimasukkan ke Git atau dokumen.
+### Jalur cadangan
 
-### Menerapkan konfigurasi dengan benar
+Port-forward SSH ke localhost:18443 hanya bila domain bermasalah dan operator mempunyai akses. Verifikasi sertifikat internal atau pasang trust CA melalui kebijakan kantor; gunakan domain untuk pengguna umum. Detail SSH ada pada VPS_PRIVATE.md.
 
-Pada Compose env_file, perubahan app.env memerlukan recreate service yang memakai env; restart saja tidak selalu memuat env baru. Bersihkan/bangun kembali cache konfigurasi bila sebelumnya dipakai. Pastikan worker dan scheduler menerima nilai yang sama.
+> **Jaga isolasi**
+> Gunakan kedua file Compose ketika membuat ulang web. Jangan menjalankan down -v, menginisialisasi ulang database, memulihkan dump lama atau me-restart seluruh container kantor untuk memperbaiki tampilan. Akses Docker/root setara kewenangan membaca rahasia.
 
-> **Uji oleh pemilik akun**
-> Periksa inbox/spam, URL HTTPS, expiry dan aktivasi OTP baru. Jangan mereset akun asli hanya untuk smoke test tanpa koordinasi. Gate NADI_PRODUCTION_READY baru diaktifkan setelah persyaratan, UAT dan persetujuan operasional terpenuhi.
+Sumber: `infra/compose.yaml`, `infra/domain/compose.proxy.yaml`, `docs/operations/VPS_PRIVATE.md`.
 
-Preflight memeriksa beberapa konfigurasi, bukan kepercayaan sertifikat dari browser, keberhasilan SMTP end-to-end, backup offsite, atau keseluruhan readiness.
+## Runbook rilis & migrasi
 
-Sumber: `config/mail.php`, `config/trustedproxy.php`, `app/Modules/IdentityAccess/Http/RecoveryController.php`, `routes/console.php`, `docs/operations/SETUP.md`.
+Bangun rilis yang dapat dibalik sebelum mengganti service; migrasi memakai role owner.
+
+*Bab 12 / Deployment; halaman PDF 42.*
+
+| Tahap | Tindakan |
+| --- | --- |
+| 1. Bekukan rilis | Catat commit/lockfile, inventaris container, fingerprint dan image cadangan terverifikasi. |
+| 2. Cadangkan | DB, file privat, konfigurasi/kunci dan source; periksa unggahan serta kemampuan pemulihan. |
+| 3. Tentukan dampak | Koordinasikan jendela bila penulisan/skema memerlukan; migrasi tambahan yang kompatibel dapat mengurangi downtime. |
+| 4. Bangun | Build hanya app/web NADI ASN; periksa .dockerignore dan kapasitas. Jangan sentuh aplikasi kantor lain. |
+| 5. Migrasi | One-off owner melalui secret privat. Runtime tidak memiliki DDL. Pertahankan izin 0600 pada secret. |
+| 6. Grant | Terapkan runtime-grants.sql sesudah migrasi sebagai owner. Jangan memasukkan kredensial owner ke app.env. |
+| 7. Ganti service | Kedua file Compose; up --no-build --no-deps untuk app, worker, scheduler, web. DB/antivirus tidak perlu dibuat ulang pada rilis biasa. |
+| 8. Periksa | Health, preflight, mode asli, domain/auth, fingerprint, monitor dan browser. Simpan hasil. |
+
+> **Container migrasi dengan cap_drop ALL**
+> UID 0 tanpa kemampuan DAC override tidak selalu dapat membaca secret milik host UID lain atau menulis cache www-data. Gunakan UID yang sesuai kepemilikan secret dan tmpfs cache sementara yang writable. Jangan chmod secret 0644 atau memberi owner pada runtime.
+
+Rollback kode tidak memulihkan data. Image lama harus kompatibel dengan skema kini. Jangan migrate:rollback atau restore dump sebagai langkah rutin; beberapa migrasi menjaga histori dan menolak rollback.
+
+Sumber: `infra/docker/Dockerfile`, `infra/compose.yaml`, `infra/docker/runtime-grants.sql`, `docs/operations/VISITOR_STATISTICS.md`.
+
+## Domain, HTTPS & SMTP
+
+Domain publik, sertifikat dan pemulihan email aktif sejak 30 September 2026.
+
+*Bab 12 / Deployment; halaman PDF 43.*
+
+### DNS dan batas proxy
+
+Hostinger mengarahkan A apex ke VPS dan CNAME www ke domain utama. HTTP dan HTTPS www dialihkan ke HTTPS apex. NPM memakai konfigurasi khusus /data/nginx/nadi/domain.conf; host ini tidak muncul sebagai Proxy Host pada UI. Jangan membuat host kedua tanpa migrasi konfigurasi.
+
+### Dua lapisan TLS
+
+Sertifikat publik Let's Encrypt mencakup apex/www dan diperpanjang cron dua kali sehari melalui namespace nadi-asn. TLS upstream web diverifikasi terhadap CA privat dan nama localhost. Hanya web berada di network proxy; DB/app tetap terisolasi.
+
+```text
+curl -I https://nadiasndpmptspsulteng.online/
+docker exec npm nginx -t
+# Operator: periksa crontab dan renew.log, bukan private key.
+```
+
+### Email pemulihan
+
+SMTP Gmail dikonfigurasi privat; penerima pemulihan tersimpan di users.recovery_email dan tidak selalu sama dengan pengirim. Sandi aplikasi tidak masuk dokumen atau Git. Pemilik mengonfirmasi pemulihan end-to-end pada 30 September.
+
+APP_URL dan NADI_FRONTEND_URL memakai domain HTTPS yang sama. Perubahan env_file memerlukan recreate app/worker/scheduler; restart saja tidak selalu membaca env baru. Uji email hanya dengan koordinasi pemilik karena tautan baru menggantikan tautan lama.
+
+> **Pemulihan kegagalan**
+> Periksa transport, sender, jaringan, flag dan kredensial privat. Kegagalan SMTP membatalkan token permintaan baru; password/OTP yang aktif tetap berlaku. Jangan menonaktifkan TLS/CSRF untuk memperbaiki koneksi.
+
+Sumber: `infra/domain/renew-certificate.sh`, `infra/domain/nadi-domain-public.conf`, `config/mail.php`, `docs/operations/DOMAIN_2026-09-30.md`.
 
 ## Pemantauan & tugas rutin
 
-Pisahkan health proses, health dependensi, keberhasilan pekerjaan dan kebenaran data.
+Monitor host lima menit aktif; gangguan dua kali berturut-turut memicu email.
 
-*Bab 13 / Operasi; halaman PDF 42.*
+*Bab 13 / Operasi; halaman PDF 44.*
 
-| Yang dipantau | Cara dan tindak lanjut |
+| Cakupan | Pemeriksaan / tindakan |
 | --- | --- |
-| Container / resource | compose ps, docker stats dan log service; periksa restart loop, OOM, disk/inode, RAM dan penggunaan CPU. |
-| HTTP | /up dan /api/session melalui TLS. Health HTTP saja tidak membuktikan worker/scan/SMTP sehat. |
-| Antrean | jobs/failed_jobs, umur job tertua dan status import/export. Worker 90 detik timeout; retry_after database 120 detik. |
-| Scheduler | Key cache nadi_scheduler_heartbeat diperbarui per menit, expiry 5 menit. Heartbeat bukan bukti backup berjalan. |
-| Antivirus | Healthcheck ClamAV dan freshness signature. Ketidaktersediaan menyebabkan upload fail-closed. |
-| TLS / domain | Pantau expiry sertifikat dan uji akses dari jaringan pengguna. Sertifikat privat sementara memiliki masa berlaku terbatas. |
-| Backup | Waktu sukses terakhir, checksum, lokasi offsite, kapasitas dan tanggal restore drill terakhir. |
-| Keamanan | Audit perubahan akun/unit/data; lonjakan 401/403/419/429; perubahan konfigurasi dan dependensi. |
-
-### Perintah diagnostik terarah
+| 21 pemeriksaan | Enam container, health/session HTTPS, mode asli, DB, scheduler, antrean/jobs, gate/debug/cookie, disk, masa berlaku TLS publik/internal dan umur backup. |
+| Transisi insiden | Dua gagal berurutan mengirim email gangguan; satu sehat mengirim email pulih. Kondisi sama tidak mengirim ulang. Pengiriman gagal dicoba lagi. |
+| Eksekusi / privasi | Cron anggauser menjalankan infra/monitor/check.py. Config/state/log privat dalam .deploy/monitor; email tidak memuat secret atau identitas pegawai. |
+| Cadangan | Monitor memeriksa usia last-success data/project. Kegagalan upload sesaat tidak langsung mendapat alarm tersendiri. |
+| Antrean dan storage | Periksa umur job, failed_jobs, log, kapasitas disk/inode dan private_files. Upload scanner fail-closed. |
 
 ```text
-docker compose -f infra/compose.yaml logs --tail=100 app worker scheduler
-docker compose -f infra/compose.yaml logs --tail=100 antivirus
-docker compose -f infra/compose.yaml exec app php artisan queue:failed
+cd /home/anggauser/nadi-asn
+python3 -B infra/monitor/check.py
+cat .deploy/monitor/status.json
+tail -n 30 .deploy/monitor/monitor.log
 ```
 
-> **Retensi log belum seragam**
-> Docker stdout/stderr memakai json-file 10 MB × 3 per container. Laravel default LOG_CHANNEL=single menyimpan file di volume app_logs; batas Docker tidak merotasi file Laravel. Tetapkan rotasi/retensi dan akses terpisah untuk log aplikasi.
+> **Batas pemantauan**
+> Monitor berada pada VPS yang sama, tidak me-restart service. VPS mati total/cron berhenti/jaringan SMTP terputus tidak dapat dilaporkan dari host ini; monitor eksternal belum dipasang. HTTP sehat tidak membuktikan seluruh alur pengguna sehat.
 
-Sumber: `infra/compose.yaml`, `routes/console.php`, `config/queue.php`, `config/logging.php`.
+Log Docker dibatasi 10 MB x 3 per container. Laravel LOG_CHANNEL=single tidak ikut rotasi Docker; retensi/rotasi log aplikasi perlu kebijakan terpisah. Jangan memakai pembaruan online pengunjung sebagai bukti sesi login atau worker tetap sehat.
+
+Sumber: `infra/monitor/check.py`, `docs/operations/MONITORING.md`, `infra/compose.yaml`, `routes/console.php`.
 
 ## Strategi backup & retensi
 
-Backup yang dapat dipulihkan mencakup database, berkas privat dan kunci yang diperlukan.
+Dua jalur backup terenkripsi Google Drive aktif sesuai kebijakan pengelola.
 
-*Bab 13 / Operasi; halaman PDF 43.*
+*Bab 13 / Operasi; halaman PDF 45.*
 
-| Komponen | Yang dicadangkan / disimpan |
+| Jalur | Isi / jadwal |
 | --- | --- |
-| Database | Dump custom PostgreSQL; employee, assignment, akun terenkripsi, audit, reference dan metadata. |
-| Berkas privat | Volume private_files: impor dan hasil laporan yang masih harus dipertahankan. |
-| Konfigurasi/kunci | APP_KEY, NADI_TOTP_KEY, konfigurasi DB/SMTP, sertifikat/key dan konfigurasi runtime; arsip terenkripsi dengan akses terpisah. |
-| Kode/infrastruktur | Commit/tag, lockfile, Dockerfile/digest, Compose, Nginx, migrasi dan grant DB. |
-| Akses dekripsi | Private key age dan tata kelola akses di luar server produksi. |
+| Data operasional | vps-backup.sh: seluruh DB termasuk pengunjung, private_files dan recovery kit; setiap 14 hari 02.00 WITA. Folder NADI-ASN-Backup. |
+| Project lengkap | project-backup.sh: seluruh pohon VPS, source/assets/docs/PDF/lockfile/infra/config privat dan history bundle; tiga bulan kalender 03.00 WITA. Folder NADI-ASN-Project-Backup. |
+| Pengecualian project | DB/volume privat dipulihkan dari backup data. Docker image dibangun ulang. Engine/snapshot/token OAuth backup dan kunci dekripsi tidak ikut project. |
+| Enkripsi / integritas | age stream tanpa dump plaintext pada VPS; manifest dan SHA256SUMS. Copy, kemudian check --download seluruh file sebelum replacement. |
+| Kunci / retensi | Private age identity di luar VPS dan akun Drive. Backup lama diganti sesudah verifikasi; Drive Trash tidak dikosongkan. |
 
-Contoh infra/backup/backup.sh melakukan pg_dump custom -> enkripsi age -> checksum SHA-256 -> rclone copy -> rclone check. Timer contoh setiap empat jam. PRD menargetkan RPO <= 6 jam dan RTO <= 8 jam; pencapaiannya harus diukur melalui latihan.
+### Jadwal dan marker
 
-> **Template backup belum menjadi layanan lengkap**
-> Script hanya mencadangkan DB, tidak private_files/kunci. Service template memakai /opt/nadi, user nadi-backup dan /etc/nadi/backup.env, sedangkan instalasi aktif ada di /home/anggauser/nadi-asn. Adaptasi path, akses DB internal, izin, dependency, remote, retensi dan alarm diperlukan.
+Cron memeriksa jatuh tempo harian; interval data bukan */14 tanggal bulan dan project bukan 90 hari. Marker last-success/project-last-success diubah hanya setelah sukses, termasuk backup manual. Snapshot 5 Oktober terverifikasi lima file data dan tiga file project.
 
-PGPASSFILE dan rclone config harus privat. Role backup hanya diberi akses yang diperlukan. Karena DB tidak publish port, tentukan eksekusi dump melalui container/jaringan terkontrol; jangan membuka port DB publik demi backup.
+> **RPO dan snapshot**
+> Kebijakan 14 hari menggantikan target awal PRD enam jam; kehilangan transaksi sejak backup terakhir tetap mungkin. Dump DB konsisten, tetapi arsip volume diambil setelah dump sehingga bukan snapshot atomik lintas volume. Pengujian restore DB/arsip tidak menetapkan RTO aplikasi penuh.
 
-Jadwal offsite, retensi dan notifikasi kegagalan belum tercatat aktif. Menetapkan jadwal empat jam saja tidak menjamin RPO bila job gagal atau salinan belum terverifikasi.
+Kuota API Google Drive sempat menolak upload 5 Oktober; retry berhasil dan cadangan lama tetap aman. Token OAuth privat; koneksi aktif belum memakai client khusus kantor. Siapkan migrasi koneksi lewat otorisasi pemilik agar tidak bergantung pada client bersama.
 
-Sumber: `infra/backup/backup.sh`, `infra/backup/nadi-backup.service`, `infra/backup/nadi-backup.timer`, `PRD NADI ASN DPMPTSP.md`, `docs/operations/SECURITY_REVIEW_2026-09-28.md`.
+Sumber: `infra/backup/vps-backup.sh`, `infra/backup/project-backup.sh`, `infra/backup/policy.py`, `docs/operations/BACKUP_GOOGLE_DRIVE.md`.
 
 ## Runbook pemulihan bencana
 
 Lakukan restore drill pada lingkungan terisolasi sebelum prosedur ini diperlukan dalam insiden nyata.
 
-*Bab 13 / Operasi; halaman PDF 44.*
+*Bab 13 / Operasi; halaman PDF 46.*
 
 | Tahap | Keluaran yang harus diperiksa |
 | --- | --- |
@@ -1268,7 +1320,7 @@ Sumber: `docs/operations/SETUP.md`, `docs/operations/VPS_PRIVATE.md`, `infra/doc
 
 Urutan penanganan: tentukan dampak, kumpulkan bukti minimum, pulihkan terarah, lalu verifikasi.
 
-*Bab 13 / Operasi; halaman PDF 45.*
+*Bab 13 / Operasi; halaman PDF 47.*
 
 | Gejala | Pemeriksaan / tindakan |
 | --- | --- |
@@ -1285,19 +1337,20 @@ Urutan penanganan: tentukan dampak, kumpulkan bukti minimum, pulihkan terarah, l
 > **Dugaan kebocoran atau pengambilalihan**
 > Batasi akses komponen terdampak, pertahankan audit/log dan catat waktu. Cabut akun/sesi atau rotasi kredensial yang relevan melalui prosedur terverifikasi. Koordinasikan pemilik sistem/tim keamanan sebelum restore atau menghapus bukti.
 
-Belum ada fitur break-glass Super Admin siap pakai. Ketika SMTP belum aktif dan akses Super Admin hilang, pemulihan memerlukan pengelola tepercaya serta prosedur backend yang direview; jangan mengubah APP_ENV produksi menjadi local agar perintah lokal bisa dijalankan.
+> **Akses Super Admin hilang**
+> Gunakan pemulihan email yang telah aktif dan teruji. Bila SMTP bermasalah, pulihkan transport terlebih dahulu dengan pengelola tepercaya. Belum ada fitur break-glass siap pakai; jangan mengubah APP_ENV produksi menjadi local agar perintah provisioning dapat berjalan.
 
 Sumber: `docs/operations/VPS_PRIVATE.md`, `app/Modules/IdentityAccess/Http/RecoveryController.php`, `routes/personnel_setup.php`, `config/queue.php`.
 
 ## Kapasitas, batas & backlog teknis
 
-Daftar ini membedakan kebutuhan sebelum launch dengan peningkatan sesudahnya.
+Fitur peluncuran sudah aktif; batas dan pemeliharaan berikut belum menjadi SLA.
 
-*Bab 14 / Pemeliharaan; halaman PDF 46.*
+*Bab 14 / Pemeliharaan; halaman PDF 48.*
 
 | Prioritas | Pekerjaan / alasan |
 | --- | --- |
-| Sebelum publik | Domain/TLS tepercaya, SMTP teruji, backup offsite + restore drill, monitor/alarm, UAT dan keputusan sumber data utama. |
+| Peluncuran selesai | Domain/TLS, SMTP teruji, offsite terenkripsi, restore DB terisolasi, monitor host, UAT pemilik dan VPS sumber utama. Monitor eksternal belum ada. |
 | Operasi berkelanjutan | Retensi/purge imports/exports/log/queue; audit dependency/image; pemilik kunci, prosedur recovery dan patch terjadwal. |
 | Integritas layanan | Enforce expiry impor sesuai kebijakan; review penonaktifan unit terhadap histori OFFICIAL; rekonsiliasi login saat NIP berubah. |
 | Skalabilitas | Dorong filter/proyeksi/pagination ke query terukur; hindari pemuatan seluruh data berulang pada statistik/DUK/Radar/ekspor. |
@@ -1317,7 +1370,7 @@ Sumber: `app/Modules/Personnel/Http/EmployeeController.php`, `app/Modules/Refere
 
 Gunakan checklist ini untuk menetapkan penanggung jawab; nama personel diisi oleh instansi.
 
-*Bab 14 / Pemeliharaan; halaman PDF 47.*
+*Bab 14 / Pemeliharaan; halaman PDF 49.*
 
 | Item | Bukti yang diserahkan |
 | --- | --- |
@@ -1344,7 +1397,7 @@ Sumber: `docs/operations/SETUP.md`, `docs/operations/VPS_PRIVATE.md`, `docs/user
 
 Semua path relatif terhadap root repository; source of truth adalah baseline kode yang dicatat di awal.
 
-*Bab 15 / Referensi; halaman PDF 48.*
+*Bab 15 / Referensi; halaman PDF 50.*
 
 | Pertanyaan tim penerus | Sumber yang dibaca |
 | --- | --- |

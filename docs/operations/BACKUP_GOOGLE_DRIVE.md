@@ -1,6 +1,10 @@
 # Backup Google Drive NADI ASN
 
-## Status penyiapan — 30 September 2026
+## Status terkini - 5 Oktober 2026
+
+Backup data terbaru `nadi-20261005T002934Z` berhasil diunggah dan lima file cocok pada baca ulang. Dump mencakup dua tabel statistik pengunjung. Percobaan awal tertahan kuota API Drive; backup lama dipertahankan sampai retry berhasil. Monitor memeriksa umur backup, bukan setiap kode kegagalan unggahan.
+
+## Bukti penyiapan 30 September 2026
 
 Tujuan dipilih pengelola: Google Drive akun kantor. Alat age dan rclone dipasang tanpa root dari paket Ubuntu 24.04 yang menerima pembaruan keamanan, di `.deploy/backup/tools/usr/bin/`. Bukan instalasi paket global.
 
@@ -48,7 +52,7 @@ Setiap snapshot memiliki folder `nadi-YYYYMMDDTHHMMSSZ` dengan:
 
 Plaintext dump/arsip tidak ditulis ke disk VPS; pipeline langsung dienkripsi. Kunci dekripsi tidak masuk ke arsip atau VPS. Snapshot PostgreSQL konsisten secara transaksi. Arsip berkas diambil setelah dump dari volume aktif, sehingga bukan snapshot atomik lintas database/volume; jangan mengklaim titik waktu yang identik. Kegagalan dump, tar, upload atau pembacaan ulang menggagalkan backup.
 
-Jadwal: setiap 14 hari pada 02:00 WITA. Cron VPS menjalankan pemeriksaan harian pukul 18:00 UTC, kemudian `policy.py` membandingkan tanggal WITA dengan backup sukses terakhir; hari yang belum mencapai 14 hari dilewati. Ini tidak memakai `*/14` pada hari dalam bulan, yang tidak memberikan interval dua minggu konsisten. Backup berikutnya dijadwalkan 14 Oktober 2026 pukul 02:00 WITA. Ada lock agar proses tidak tumpang tindih dan timeout 30 menit. Jadwal mempertahankan crontab perpanjangan TLS. Jika backup gagal, backup lama dipertahankan dan pemeriksaan berikutnya mencoba lagi keesokan hari.
+Jadwal: setiap 14 hari pada 02:00 WITA. Cron VPS menjalankan pemeriksaan harian pukul 18:00 UTC, kemudian `policy.py` membandingkan tanggal WITA dengan backup sukses terakhir; hari yang belum mencapai 14 hari dilewati. Ini tidak memakai `*/14` pada hari dalam bulan, yang tidak memberikan interval dua minggu konsisten. Berdasarkan backup sukses 5 Oktober, berikutnya 19 Oktober 2026 pukul 02:00 WITA bila tidak ada backup manual sukses baru. Marker `last-success` selalu menjadi acuan. Ada lock agar proses tidak tumpang tindih dan timeout 30 menit. Jadwal mempertahankan crontab perpanjangan TLS. Jika backup gagal, backup lama dipertahankan dan pemeriksaan berikutnya mencoba lagi keesokan hari.
 
 Upload menggunakan copy, tidak sync. Sesuai instruksi pengelola, backup baru diunggah dan seluruh komponen dibaca kembali sebelum penghapusan lama. Penghapusan cloud hanya berlaku untuk direktori bertimestamp `nadi-YYYYMMDDTHHMMSSZ` yang lebih lama dalam namespace tepat `nadibackup:NADI-ASN-Backup`; direktori terbaru, nama asing, dan nama tidak valid dipertahankan. Google Drive memindahkan backup lama ke Sampah sesuai perilaku default, tanpa mengosongkan Sampah akun. Salinan lokal VPS yang lebih lama juga dibersihkan, dengan pengecualian symlink. Direktori/file lain pada Drive dan VPS tidak ikut dihapus. Google Drive dengan akses tulis bukan penyimpanan immutable; operator atau pencuri token dapat menghapus berkas.
 
@@ -76,7 +80,7 @@ tail -n 40 .deploy/backup/cron.log
   lsd nadibackup:NADI-ASN-Backup
 ```
 
-`last-success` hanya diperbarui setelah unggahan dan check --download berhasil. `COLLECTED` berarti salinan lokal terenkripsi, bukan sukses offsite. `FAILED` merekam tahap kegagalan. Belum ada notifikasi kegagalan otomatis; pengelola harus memeriksa status dan usia last-success. Pantau juga kapasitas Drive dan disk VPS. Jangan menampilkan rclone.conf/app.env untuk troubleshooting.
+`last-success` hanya diperbarui setelah unggahan dan check --download berhasil. `COLLECTED` berarti salinan lokal terenkripsi, bukan sukses offsite. `FAILED` merekam tahap kegagalan. Monitor host memberi alarm bila usia backup melewati ambang. Kegagalan setiap percobaan tidak langsung menghasilkan email tersendiri; pengelola tetap memeriksa status, `last-failure` dan usia `last-success`. Pantau juga kapasitas Drive dan disk VPS. Jangan menampilkan rclone.conf/app.env untuk troubleshooting.
 
 ## Pemulihan
 
@@ -90,3 +94,7 @@ tail -n 40 .deploy/backup/cron.log
 8. Hapus berkas plaintext uji setelah pemeriksaan dan simpan kunci dekripsi secara aman.
 
 Sumber: [rclone Google Drive](https://rclone.org/drive/), [otorisasi VPS melalui SSH tunnel](https://rclone.org/remote_setup/), [age](https://github.com/FiloSottile/age).
+
+## Koneksi Drive dan batas permintaan
+
+Koneksi aktif belum memakai OAuth client khusus kantor. Pada 5 Oktober API bersama mengembalikan `rateLimitExceeded`; retry berikutnya berhasil. Jika berulang, periksa log tanpa mencetak token, pertahankan cadangan lama dan buat koneksi OAuth khusus organisasi melalui otorisasi pemilik akun. Dokumentasi resmi rclone menyatakan client bersama akan dihentikan pada 2026: [panduan client milik sendiri](https://rclone.org/drive/#making-your-own-client-id). Jangan mengganti token/client atau menjalankan script otorisasi ulang pada koneksi aktif tanpa rencana dan persetujuan pemilik akun.

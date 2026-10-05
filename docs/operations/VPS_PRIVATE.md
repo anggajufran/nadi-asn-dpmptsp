@@ -1,4 +1,6 @@
-# Akses dan pengelolaan VPS privat
+# Akses operator VPS NADI ASN
+
+Edisi 5 Oktober 2026. Jalur utama pengguna adalah domain publik HTTPS; jalur privat hanya untuk operator.
 
 NADI ASN dipasang di `/home/anggauser/nadi-asn` pada VPS kantor, dalam project Compose `nadi-asn`. Enam service: web, app, worker, scheduler, db dan antivirus. Database serta berkas privat disimpan dalam volume khusus NADI ASN.
 
@@ -32,12 +34,12 @@ Alamat IP publik port 18443 tidak dibuka. Sejak 30 September 2026, Nginx Proxy M
 
 ```sh
 cd /home/anggauser/nadi-asn
-docker compose -f infra/compose.yaml ps
-docker compose -f infra/compose.yaml exec app php artisan nadi:preflight
-docker compose -f infra/compose.yaml logs --tail=50 app worker scheduler
+docker compose -f infra/compose.yaml -f infra/domain/compose.proxy.yaml ps
+docker compose -f infra/compose.yaml -f infra/domain/compose.proxy.yaml exec app php artisan nadi:preflight
+docker compose -f infra/compose.yaml -f infra/domain/compose.proxy.yaml logs --tail=50 app worker scheduler
 ```
 
-Jika diperlukan, restart service NADI ASN tertentu, misalnya `docker compose -f infra/compose.yaml restart worker`. Jangan memakai perintah yang menghentikan semua container VPS. Jangan memakai `down -v` karena menghapus volume data.
+Jika diperlukan, restart service NADI ASN tertentu, misalnya `docker compose -f infra/compose.yaml -f infra/domain/compose.proxy.yaml restart worker`. Jangan memakai perintah yang menghentikan semua container VPS. Jangan memakai `down -v` karena menghapus volume data.
 
 ## Data dan konfigurasi
 

@@ -58,7 +58,7 @@ Mulai dari [indeks dokumentasi](docs/README.md) atau:
 - [Setup pengembangan](docs/operations/SETUP.md), [pengelolaan VPS](docs/operations/VPS_PRIVATE.md), [panduan pengguna](docs/user/PANDUAN.md), [Radar](docs/user/RADAR.md)
 - [Status implementasi](docs/STATUS_IMPLEMENTASI.md), [bukti validasi](docs/VALIDASI.md), [audit keamanan 28 September](docs/operations/SECURITY_REVIEW_2026-09-28.md)
 
-Buku PDF dan dokumen teknis edisi 29 September merupakan snapshot sebelum peluncuran; gunakan catatan operasi 30 September untuk status domain, SMTP, backup dan pemantauan terkini. PRD/Stage 1 disimpan sebagai acuan awal; revisi pengguna dan kode aktif dapat menggantikan rancangan awal.
+Buku pedoman dan dokumentasi teknis **edisi 2.0, 5 Oktober 2026** sudah mencakup kondisi produksi, domain/SMTP, backup, monitoring serta statistik pengunjung. Gunakan [indeks dokumentasi terbaru](docs/README.md). PRD/Stage 1 disimpan sebagai acuan awal; revisi pengguna dan kode aktif dapat menggantikan rancangan awal.
 
 ## Pengembangan dan simulasi
 

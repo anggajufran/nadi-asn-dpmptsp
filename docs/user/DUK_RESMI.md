@@ -1,5 +1,7 @@
 # DUK Digital — urutan manual, 15 September 2026
 
+Edisi 5 Oktober 2026. Gunakan domain produksi https://nadiasndpmptspsulteng.online. Panduan ini mengikuti implementasi aktif.
+
 Kebijakan terbaru menggantikan hierarki otomatis, MKG hasil perhitungan, kandidat, dan pengesahan DUK. Urutan awal mengikuti No. sumber pada DATA PEGAWAI 2026.pdf. Masa kerja pada lembar tetap merupakan masa kerja keseluruhan sesuai PDF. Tidak ada pengurutan ulang otomatis berdasarkan pangkat, jabatan, diklat, pendidikan, atau usia.
 
 ## Mengatur urutan

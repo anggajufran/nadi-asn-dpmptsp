@@ -1,4 +1,6 @@
-# Statistik pengunjung — disiapkan 1 Oktober, diselesaikan 5 Oktober 2026
+# Statistik pengunjung NADI ASN
+
+Edisi 5 Oktober 2026. Fitur aktif pada domain produksi; baca [tutorial pengguna](../user/PANDUAN.md#statistik-pengunjung).
 
 Ditampilkan pada portal publik dan Command Center untuk Admin/Super Admin. Endpoint agregat GET /api/public/visitors dan heartbeat POST /api/public/visitors/heartbeat. POST bersifat stateless, mewajibkan Origin yang tepat sama dengan URL frontend dan dibatasi 120 permintaan/menit per IP; GET dibatasi seperti statistik publik lainnya.
 

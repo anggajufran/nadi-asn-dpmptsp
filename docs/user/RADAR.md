@@ -1,5 +1,7 @@
 # Panduan KP Radar dan KGB Radar
 
+Edisi 5 Oktober 2026. Gunakan domain produksi https://nadiasndpmptspsulteng.online. Panduan ini mengikuti implementasi aktif.
+
 Pembaruan 22–23 September 2026 · versi aturan `2026-09-22.1`, berdasarkan `NADI-ASN-Rules-KP dan KGB.md` dari instansi. Hanya **PNS aktif** masuk Radar. Hasil membantu pemeriksaan administrasi; keputusan tetap mengikuti dokumen dan proses yang berlaku.
 
 ## Menggunakan Radar

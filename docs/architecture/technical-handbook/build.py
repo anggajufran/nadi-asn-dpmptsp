@@ -8,7 +8,7 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import Paragraph,Table,TableStyle
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from content import PAGES
+from content import PAGES, EDITION, PUBLISHED, BASELINE
 ROOT=Path(__file__).resolve().parents[3]
 OUT=ROOT/'output/pdf/Dokumentasi-Teknis-NADI-ASN.pdf'
 MD=ROOT/'docs/architecture/DOKUMENTASI_TEKNIS_NADI_ASN.md'
@@ -28,7 +28,7 @@ NAVY=HexColor('#15324D');TEAL=HexColor('#078B91');INK=HexColor('#263E50');MUTED=
 W,H=595.276,841.89;M=42;CW=W-2*M;TOTAL=len(PAGES)+1
 c=canvas.Canvas(str(OUT),pagesize=(W,H),pageCompression=1)
 c.setTitle('Dokumentasi Teknis Sistem dan Panduan Serah Terima NADI ASN')
-c.setAuthor('DPMPTSP Prov. Sulawesi Tengah');c.setSubject('Arsitektur, data, API, keamanan, deployment dan operasi. Baseline 5b1b70a; edisi 29 September 2026.')
+c.setAuthor('DPMPTSP Prov. Sulawesi Tengah');c.setSubject(f'Arsitektur, data, API, keamanan dan operasi. Baseline {BASELINE[:7]}; edisi {PUBLISHED}.')
 y=0;checks=[]
 def clean(s):return s.replace('–','-').replace('—','-').replace('‑','-').replace('→','->').replace('↔','&lt;->').replace('≤','&lt;=').replace('≥','>=').replace('≠','!=')
 def para(s,size=9.7,leading=14.2,color=INK,bold=False,x=M,width=CW,gap=9):
@@ -84,17 +84,17 @@ def draw_diagram(kind):
  global y
  top=y
  if kind=='architecture':
-  node(M,top,160,61,'Browser','Publik / Admin / Super Admin',True)
-  node(M+191,top,130,61,'Nginx','SPA dist + TLS')
+  node(M,top,160,61,'Browser / NPM','TLS domain publik',True)
+  node(M+191,top,130,61,'Web Nginx','SPA dist + TLS upstream')
   node(M+352,top,159,61,'Laravel','Route, auth, domain',True)
   arrow(M+163,top-30,M+188,top-30);arrow(M+324,top-30,M+349,top-30)
   node(M+352,top-98,159,64,'PostgreSQL','Data, sesi, queue, cache')
   arrow(M+430,top-64,M+430,top-95)
-  node(M,top-98,155,64,'Worker + scheduler','Impor, ekspor, heartbeat')
+  node(M,top-98,155,64,'Worker + scheduler','Antrean, heartbeat scheduler')
   arrow(M+158,top-130,M+349,top-130)
   node(M,top-198,155,62,'Storage privat','File impor + laporan')
   node(M+177,top-198,155,62,'ClamAV','Pemeriksaan unggahan')
-  node(M+354,top-198,157,62,'SMTP','Pemulihan akun\n(belum aktif)')
+  node(M+354,top-198,157,62,'SMTP','Pemulihan akun aktif')
   c.setStrokeColor(LINE);c.line(M,top-180,M+CW,top-180)
   y=top-279;para('Akses dependensi melalui backend/worker; browser tidak terhubung langsung ke DB atau file privat.',8.4,12,MUTED,gap=14)
  elif kind=='erd':
@@ -148,7 +148,7 @@ def cover():
  c.setStrokeColor(TEAL);c.setLineWidth(3);c.line(M,337,M+75,337)
  y=308;para('DPMPTSP Prov. Sulawesi Tengah',12,18,white,True);para('Panduan serah terima pengembang & pengelola',10.5,16,HexColor('#C4D9E3'))
  c.setFillColor(HexColor('#204A62'));c.roundRect(M,121,CW,64,8,fill=1,stroke=0)
- y=168;para('EDISI 1.0  •  29 SEPTEMBER 2026',9.5,14,white,True,x=M+14,width=CW-28,gap=5);para(f'{TOTAL} halaman  |  Baseline 5b1b70a  |  Distribusi internal',9,13,HexColor('#C4D9E3'),x=M+14,width=CW-28)
+ y=168;para('EDISI 2.0  •  5 OKTOBER 2026',9.5,14,white,True,x=M+14,width=CW-28,gap=5);para(f'{TOTAL} halaman  |  Baseline f03ce2f  |  Distribusi internal',9,13,HexColor('#C4D9E3'),x=M+14,width=CW-28)
  footer(1,[],True);c.showPage()
 
 cover()
@@ -177,10 +177,10 @@ def txt(s):
  s=clean(s).replace('<b>','**').replace('</b>','**').replace('<br/>','\n')
  return html.unescape(re.sub('<[^>]+>','',s))
 mermaids={
- 'architecture':'''flowchart LR\n Browser --> Nginx\n Nginx --> SPA[Vue build dist]\n Nginx --> Laravel\n Laravel --> PostgreSQL\n Worker --> PostgreSQL\n Scheduler --> PostgreSQL\n Laravel --> ClamAV\n Laravel --> SMTP[SMTP - belum aktif]\n Laravel --> Storage[Storage privat]\n Worker --> Storage''',
+ 'architecture':'''flowchart LR\n Browser --> NPM[Proxy TLS domain]\n NPM --> Nginx\n Nginx --> SPA[Vue build dist]\n Nginx --> Laravel\n Laravel --> PostgreSQL\n Worker --> PostgreSQL\n Scheduler --> PostgreSQL\n Laravel --> ClamAV\n Laravel --> SMTP[SMTP pemulihan aktif]\n Laravel --> Storage[Storage privat]\n Worker --> Storage''',
  'erd':'''erDiagram\n employees ||--o{ employee_assignments : mempunyai\n reference_values ||--o{ employee_assignments : unit\n employees ||--o| users : akun_opsional\n employees ||--o{ change_requests : perubahan\n users ||--o{ change_requests : maker_checker\n employees ||--o{ radar_records : pemeriksaan\n users ||--o{ import_batches : pemilik\n import_batches ||--o{ import_rows : baris\n change_requests ||--o{ import_rows : hasil\n users ||--o{ export_jobs : pemilik\n users ||--o{ audit_events : aktor'''
 }
-lines=['# Dokumentasi Teknis Sistem dan Panduan Serah Terima NADI ASN','','DPMPTSP Prov. Sulawesi Tengah | Edisi 1.0 | 29 September 2026','','Baseline: `5b1b70ae786ec4384614cebd41b50041cc1979df`. Distribusi internal.','']
+lines=['# Dokumentasi Teknis Sistem dan Panduan Serah Terima NADI ASN','','DPMPTSP Prov. Sulawesi Tengah | Edisi 2.0 | 5 Oktober 2026','','Baseline: `f03ce2f9581af83325d8b9fb2bbc99b45983ab0c`. Distribusi internal.','']
 for n,pa in enumerate(PAGES,2):
  lines+=['## '+pa['title'],'',pa['deck'],'',f'*Bab {pa["section"]}; halaman PDF {n}.*','']
  for bl in pa['blocks']:

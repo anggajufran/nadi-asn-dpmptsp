@@ -1,10 +1,10 @@
 # Sumber Dokumentasi Teknis NADI ASN
 
-Dokumen ini menjelaskan implementasi pada commit `5b1b70ae786ec4384614cebd41b50041cc1979df` dan bukti operasional bertanggal 28 September 2026. Ia tidak mengubah aplikasi, database, atau VPS.
+Edisi 2.0, 5 Oktober 2026. Dokumen menjelaskan baseline aplikasi `f03ce2f9581af83325d8b9fb2bbc99b45983ab0c`, domain publik, SMTP, backup, monitoring dan statistik pengunjung. PDF 50 halaman dan Markdown memakai isi terstruktur yang sama. Pembaruan dokumentasi tidak mengubah aplikasi atau database.
 
 ## Mengubah isi
 
-Edit `content.py`, lalu jalankan generator dari direktori mana saja:
+Edit metadata EDITION/PUBLISHED/BASELINE dan daftar PAGES pada `content.py`, lalu jalankan generator dari direktori mana saja:
 
 ```sh
 python3 docs/architecture/technical-handbook/build.py

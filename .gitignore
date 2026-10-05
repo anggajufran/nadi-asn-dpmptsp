@@ -34,3 +34,6 @@ auth.json
 tmp/
 __pycache__/
 *.py[cod]
+
+# Downloadable documentation bundle is generated from versioned source/PDF.
+output/documentation/*.zip

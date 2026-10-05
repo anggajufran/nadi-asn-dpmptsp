@@ -1,12 +1,8 @@
 # Menyiapkan lingkungan Laravel dan VPS
 
-**Pembaruan 28 September 2026:** build Docker, pemulihan data dan pengujian keamanan runtime sudah dijalankan pada VPS privat. Peluncuran publik masih menunggu domain/HTTPS tepercaya dan layanan email. Lihat [laporan keamanan](SECURITY_REVIEW_2026-09-28.md) dan [akses VPS privat](VPS_PRIVATE.md).
+**Edisi 5 Oktober 2026. Produksi aktif** di https://nadiasndpmptspsulteng.online. Domain/TLS, SMTP, backup Drive dan monitoring sudah tersedia; statistik pengunjung aktif. [Status operasi](STATUS_OPERASIONAL.md) adalah acuan terkini.
 
-## Status operasional 30 September 2026
-
-Produksi aktif di https://nadiasndpmptspsulteng.online. Domain/HTTPS, SMTP dan pemulihan email sudah diuji; backup Google Drive 14 hari dan project tiga bulan aktif, dengan penggantian backup lama setelah verifikasi. Database VPS menjadi sumber utama; lokal lama diarsipkan read-only. Monitor host lima menit aktif; monitor eksternal belum tersedia. Lihat [peluncuran](LAUNCH_2026-09-30.md), [monitor](MONITORING.md) dan kedua runbook backup.
-
-Bagian instalasi berikut berlaku untuk lingkungan baru yang sengaja disiapkan. Catatan 28 September dan lingkungan lokal lama bersifat historis. Jangan mengikuti bootstrap/migrasi/reset untuk menimpa instalasi produksi yang sudah aktif.
+Panduan di bawah berlaku untuk clone/instalasi baru yang sengaja disiapkan, bukan instruksi mereset produksi. Lokal lama read-only dan tidak tersinkron otomatis. Jangan menimpa `.env` atau membuat kunci baru pada instalasi yang sudah mempunyai data terenkripsi.
 
 ## Pratinjau yang tersedia
 
@@ -15,7 +11,7 @@ Gunakan Node 24 dan `npm ci`, kemudian `npm run dev`. Jangan membuka Vite ke jar
 ## Laravel lokal
 
 1. Sediakan PHP 8.4 (runtime pengujian 8.4.25), Composer 2, PostgreSQL 16. Aktifkan `pdo_pgsql`, `mbstring`, `openssl`, `tokenizer`, `xml`, `ctype`, `json`, `bcmath`, `intl`, `zip`, `gd`, dan `pcntl` untuk worker.
-2. Salin `.env.example` ke `.env`; isi koneksi database development dan timezone. Jangan commit `.env`.
+2. Hanya bila belum ada `.env`, salin `.env.example` ke `.env`; isi koneksi database development dan timezone. Jangan commit `.env`.
 3. Jalankan `composer install` menggunakan `composer.lock` yang sudah tersedia. Instalasi dan registrasi paket sudah diuji.
 4. Jalankan `php artisan key:generate`. Buat kunci acak 32 byte **berbeda** untuk `NADI_TOTP_KEY`, dalam base64, simpan di secret store instansi.
 5. Gunakan database owner/migration role khusus untuk `php artisan migrate`. Setelah itu gunakan role runtime yang memiliki DML terbatas pada tabel yang diperlukan, tanpa CREATE/ALTER/DROP atau ownership.
@@ -43,7 +39,7 @@ docker compose -f infra/compose.yaml up -d
 docker compose -f infra/compose.yaml exec app php artisan nadi:preflight
 ```
 
-Compose memerlukan seluruh secret dan sertifikat sebelum dijalankan. Domain publik nantinya dapat dilayani Nginx Proxy Manager yang sudah ada dengan konfigurasi khusus NADI ASN; jangan mengganti konfigurasi aplikasi kantor lain.
+Compose memerlukan seluruh secret dan sertifikat sebelum dijalankan. Domain produksi sudah dilayani konfigurasi khusus Nginx Proxy Manager. Gunakan overlay `infra/domain/compose.proxy.yaml` bersama Compose utama saat membuat ulang web; jangan mengganti konfigurasi aplikasi kantor lain.
 
 ## Rancangan deployment VPS (acuan awal; domain dikelola Hostinger)
 
@@ -60,7 +56,7 @@ Contoh `infra/backup/backup.sh` menjalankan dump PostgreSQL custom, enkripsi `ag
 
 Konfigurasi `PGPASSFILE`, role backup, public key recipient age, rclone remote institusi, folder lokal, timeout, kapasitas disk, retention dan notifikasi kegagalan harus disiapkan terpisah. Secret tidak disimpan pada script atau source control. Private key decrypt disimpan terpisah dari server produksi.
 
-Verifikasi upload saja bukan restore drill. Uji decrypt, checksum, `pg_restore` ke lingkungan terisolasi, row count, constraint, login, snapshot, dan laporan; ukur RPO/RTO sesuai PRD. Cadangan lokal sebelum migrasi tersedia di `.runtime/before-directory-import.dump`; pada saat awal penyiapan belum ada backup offsite atau restore drill. Keduanya telah diselesaikan pada 30 September 2026; gunakan runbook BACKUP_GOOGLE_DRIVE.md dan BACKUP_PROJECT.md.
+Verifikasi upload saja bukan restore drill. Uji decrypt, checksum, `pg_restore` ke lingkungan terisolasi, row count, constraint, login, snapshot, dan laporan; ukur RPO/RTO aktual dan bandingkan dengan kebijakan 14 hari serta kebutuhan organisasi, bukan mengklaim target PRD enam jam sudah tercapai. Cadangan lokal sebelum migrasi tersedia di `.runtime/before-directory-import.dump`; pada saat awal penyiapan belum ada backup offsite atau restore drill. Keduanya telah diselesaikan pada 30 September 2026; gunakan runbook BACKUP_GOOGLE_DRIVE.md dan BACKUP_PROJECT.md.
 
 ## Lingkungan lokal yang sudah disiapkan
 
@@ -78,7 +74,7 @@ Bila cluster masih aktif, tidak perlu menyalakannya lagi. Database development b
 
 ## Email pemulihan Super Admin
 
-Fitur aplikasi sudah tersedia, tetapi pengiriman nyata belum diuji dan belum diaktifkan pada lingkungan lokal per 16 September 2026. Isi langsung pada `.env` privat, jangan kirim kredensial melalui chat:
+SMTP produksi aktif dan pemulihan nyata dikonfirmasi pemilik akun pada 30 September 2026. Contoh berikut untuk instalasi baru; gunakan `.env` atau `.deploy/app.env` privat yang sesuai lingkungan. Jangan menimpa konfigurasi VPS aktif dan jangan mengirim kredensial melalui chat:
 
 ```dotenv
 MAIL_MAILER=smtp

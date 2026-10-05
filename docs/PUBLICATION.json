@@ -1,0 +1,21 @@
+{
+  "edition": "2.0",
+  "published": "2026-10-05",
+  "application_baseline": "f03ce2f9581af83325d8b9fb2bbc99b45983ab0c",
+  "visual_review": "All 88 pages inspected; corrected pages re-rendered and inspected",
+  "documents": {
+    "user": {
+      "pages": 38,
+      "bookmarks": 38,
+      "links": 21,
+      "sha256": "e38b6337b90e3b09e12da6f097a743db7e51db0de6e2bf8c4f1a7a5b9a28fee8"
+    },
+    "technical": {
+      "pages": 50,
+      "bookmarks": 50,
+      "links": 14,
+      "sha256": "7db57f2a142b9f190db99df1138f7c625c184314b667572e029f9e8a11e4d66f"
+    }
+  },
+  "includes": "User tutorials, developer architecture/data/API and production operations; no credentials or personnel records"
+}

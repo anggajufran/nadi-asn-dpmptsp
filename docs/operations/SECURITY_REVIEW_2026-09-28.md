@@ -1,5 +1,7 @@
 # Pemeriksaan keamanan pra-peluncuran NADI ASN
 
+> Dokumen bukti bertanggal. Untuk kondisi 5 Oktober 2026, gunakan [status operasional terkini](STATUS_OPERASIONAL.md). Bagian riwayat tidak menjadi instruksi mengembalikan konfigurasi lama.
+
 Tanggal: 28 September 2026. Status: **pemasangan privat di VPS; belum diluncurkan untuk umum**.
 
 Audit ini memeriksa source, riwayat Git, dependensi, pengujian aplikasi, dan konfigurasi runtime NADI ASN. Hasil lulus berlaku pada ruang lingkup pengujian di bawah, bukan jaminan bebas seluruh kerentanan atau pengganti pentest independen.

@@ -1,5 +1,11 @@
 # Catatan perubahan NADI ASN
 
+## 5 Oktober 2026 - dokumentasi edisi 2
+
+- Buku pedoman dan buku teknis diperbarui ke baseline f03ce2f, domain produksi, pemulihan aktif dan statistik pengunjung.
+- Panduan operasi, backup, monitoring, akun, DUK, Radar, status dan validasi diselaraskan; bukti September dipisahkan sebagai histori.
+- Sumber pembangun buku pengguna serta ilustrasi sintetis masuk repository agar PDF dapat dibangun ulang.
+
 ## 5 Oktober 2026 — statistik pengunjung (dimulai 1 Oktober)
 
 - Statistik hari ini, kemarin, minggu/bulan/tahun, total dan online pada portal publik serta Command Center.

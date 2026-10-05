@@ -1,5 +1,7 @@
 # Backup seluruh project NADI ASN
 
+Edisi 5 Oktober 2026. Bukti snapshot pada awal verifikasi 5 Oktober: `nadi-project-20261005T002819Z` berhasil diunggah dan tiga file cocok pada baca ulang; kode dan history bundle mencakup rilis statistik pengunjung `f03ce2f`. Penerbitan buku edisi 2 diikuti backup manual project baru; gunakan marker `project-last-success` untuk waktu keberhasilan aktual.
+
 Backup project terpisah dari backup operasional database/berkas privat. Pengelola meminta jadwal tiga bulan sekali pada 30 September 2026.
 
 Backup pertama `nadi-project-20260930T030224Z` sudah diunggah dan seluruh tiga berkas cocok pada verifikasi baca ulang Google Drive. Cron aktif; pemeriksaan ulang pada tanggal yang belum jatuh tempo tidak menghasilkan backup tambahan. Sepuluh pengujian kebijakan lolos, mencakup interval 14 hari, tiga bulan kalender, pergantian tahun/akhir bulan, isolasi namespace, serta kegagalan verifikasi yang mempertahankan backup lama.
@@ -12,14 +14,14 @@ Arsip mengambil seluruh pohon `/home/anggauser/nadi-asn` dengan struktur root `n
 
 Folder engine backup `.deploy/backup` dikecualikan agar arsip tidak memasukkan dirinya sendiri, paket alat backup, token OAuth dan snapshot yang berulang. Kunci dekripsi serta folder uji backup lokal tidak dimasukkan. Log aplikasi dan cache konfigurasi Laravel juga dikecualikan. Ini merupakan backup folder project VPS; direktori di komputer pengelola yang tidak dikirim ke VPS tidak otomatis tersinkron.
 
-Database aktif dan berkas privat berada dalam volume Docker, sehingga dipulihkan dari backup operasional `NADI-ASN-Backup` yang terjadwal 14 hari. Image Docker tidak diekspor; dependensi serta image dibangun/diunduh kembali melalui lockfile dan konfigurasi. Jika `.git` tersedia pada deployment mendatang, pohon tersebut ikut diarsipkan; deployment saat ini memakai `.deploy/history.bundle` untuk riwayat Git sebelumnya.
+Database aktif dan berkas privat berada dalam volume Docker, sehingga dipulihkan dari backup operasional `NADI-ASN-Backup` yang terjadwal 14 hari. Image Docker tidak diekspor; dependensi serta image dibangun/diunduh kembali melalui lockfile dan konfigurasi. Jika `.git` tersedia pada deployment mendatang, pohon tersebut ikut diarsipkan; deployment saat ini memakai `.deploy/history.bundle` untuk riwayat Git; bundle telah diperbarui ke baseline aplikasi f03ce2f pada 5 Oktober.
 
 ## Penyimpanan dan jadwal
 
 - Google Drive akun kantor: `NADI-ASN-Project-Backup/nadi-project-YYYYMMDDTHHMMSSZ/`.
 - Komponen: `project.tar.gz.age`, `manifest.json`, `SHA256SUMS`.
 - Enkripsi age memakai kunci publik yang sama dengan backup operasional; kunci privat tetap terpisah dari VPS.
-- Jadwal: setiap tiga bulan kalender pada 03:00 WITA. Jika backup pertama sukses pada 30 September 2026, tanggal berikutnya 30 Desember 2026.
+- Jadwal: setiap tiga bulan kalender pada 03:00 WITA. Marker sukses 5 Oktober memberi tanggal berikutnya 5 Januari 2027, kecuali ada backup manual sukses baru; baca `project-last-success` sebagai acuan.
 - Cron memeriksa jatuh tempo harian pada 19:00 UTC. Hari lain dilewati. Penambahan bulan memperhitungkan pergantian tahun dan hari terakhir bulan, bukan interval 90 hari.
 - Lock terpisah dan timeout satu jam. Jadwal database serta TLS tetap dipertahankan.
 - Backup baru diunggah dan dibaca kembali sebelum backup project lama diganti, mengikuti preferensi pengelola sebelumnya. Nama direktori backup operasional tidak cocok dengan pola penghapusan project.

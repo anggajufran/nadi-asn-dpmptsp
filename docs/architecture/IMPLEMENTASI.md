@@ -1,4 +1,6 @@
-# Arsitektur implementasi 0.1.0
+# Ringkasan arsitektur NADI ASN
+
+Edisi 5 Oktober 2026. Baseline aplikasi f03ce2f. Produksi aktif pada domain HTTPS, dengan database VPS sebagai sumber utama. Buku lengkap: [dokumentasi teknis](DOKUMENTASI_TEKNIS_NADI_ASN.md).
 
 ## Dua jalur eksekusi yang terpisah
 
@@ -6,8 +8,8 @@
 Simulasi opsional (5176):
 Browser → Vue/Vite → API simulasi loopback → .runtime/demo-state.json
 
-Backend lokal (5173 → 8000) dan integrasi target:
-Browser → Nginx → Vue build + Laravel → PostgreSQL
+Produksi aktif (domain HTTPS melalui NPM):
+Browser → NPM → web Nginx → Vue build + Laravel → PostgreSQL
                                       ↘ worker / scheduler
 ```
 
@@ -57,3 +59,9 @@ Lockfile saat ini diuji pada PHP 8.4.25 dengan Laravel 13.31.0 dan PostgreSQL 16
 Upload Excel disimpan di storage privat dan direkam checksum byte berkasnya. Validasi menolak formula, tautan workbook eksternal, makro, NIP numerik, duplikasi NIP, dan referensi yang belum diverifikasi. Worker membuat preview dengan canonical SHA-256. Konfirmasi menggunakan preview yang sama, mengunci batch dan pegawai, lalu membuat semua usulan baris valid dalam satu transaksi. Konflik revisi membatalkan transaksi konfirmasi; pengulangan konfirmasi yang sudah berhasil mengembalikan hasil sebelumnya.
 
 Renderer laporan menerima salinan baris pada saat permintaan, bukan membaca ulang data yang mungkin berubah saat antrean berjalan. Unduhan memeriksa pemilik, role, versi keamanan akun, status berkas dan kedaluwarsa. PDF hanya menerima DTO agregat tanpa identitas; XLSX menggunakan tipe teks eksplisit untuk mencegah konversi NIP dan formula. Riwayat permintaan membuat pekerjaan tetap dapat dilanjutkan setelah berpindah halaman.
+
+## Statistik pengunjung dan operasi
+
+VisitorStats tampil pada portal dan Command Center. App mengirim heartbeat tiap menit ketika terlihat, cookie acak terenkripsi diproyeksikan menjadi HMAC sementara dan agregat harian. Dua endpoint pengunjung menghindari middleware sesi/CSRF dan memakai Origin tepat serta cookie Strict, sehingga tidak memperpanjang idle login. Mutasi kepegawaian tetap memakai sesi/CSRF. `visitor_presences` dipangkas per jam; `visitor_daily_totals` tetap disimpan.
+
+NPM melayani TLS domain dan memverifikasi TLS web upstream. DB hanya di jaringan backend; app tidak bergabung jaringan edge. SMTP pemulihan aktif. Monitor host 21 pemeriksaan per lima menit dan backup Drive terenkripsi data 14 hari/project tiga bulan sudah terpasang. Monitor eksternal dan RTO aplikasi penuh belum dibuktikan.
