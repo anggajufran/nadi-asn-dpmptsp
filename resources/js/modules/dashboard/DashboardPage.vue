@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import VisitorStats from '@/components/VisitorStats.vue';
 import { ref, onMounted } from 'vue';
 import Icon from '@/components/Icon.vue';
 import ChartCard from '@/components/ChartCard.vue';
@@ -206,6 +207,7 @@ onMounted(async () => {
           WITA</span
         >
       </div>
-    </section></template
-  >
+    </section>
+    <VisitorStats
+  /></template>
 </template>

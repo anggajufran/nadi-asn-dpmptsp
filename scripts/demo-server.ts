@@ -83,6 +83,23 @@ export function demoServer(): Plugin {
           const session = token ? sessions.get(token) : undefined;
           const user = session && session.expires > Date.now() ? session.user : null;
           const db = readState();
+          if (path === 'csrf') return send({ ok: true });
+          if (path === 'public/visitors' || path === 'public/visitors/heartbeat') {
+            return send({
+              today: 38,
+              yesterday: 45,
+              week: 219,
+              month: 38,
+              year: 1284,
+              total: 1284,
+              online: 3,
+              trackingSince: '2026-09-01',
+              updatedAt: new Date().toISOString(),
+              timezone: 'Asia/Makassar',
+              onlineWindowMinutes: 5,
+              demo: true,
+            });
+          }
           if (path === 'session') return send({ user, demo: true });
           if (path === 'demo/login' && method === 'POST') {
             const selected = demoUsers.find((u) => u.role === body.role);

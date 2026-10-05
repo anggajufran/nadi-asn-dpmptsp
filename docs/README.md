@@ -10,6 +10,8 @@ Status operasi terbaru: **30 September 2026, produksi publik aktif**. Dokumen in
 
 ## Tim IT dan operator
 
+- [Statistik pengunjung, definisi dan privasi — 1 Oktober](operations/VISITOR_STATISTICS.md)
+
 - [Catatan peluncuran dan rollback maintenance](operations/LAUNCH_2026-09-30.md)
 - [Pemantauan dan gangguan](operations/MONITORING.md)
 - [Domain, HTTPS dan perpanjangan sertifikat](operations/DOMAIN_2026-09-30.md)

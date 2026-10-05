@@ -24,3 +24,8 @@ personnel-*.json
 *.pem
 *.key
 auth.json
+
+output
+tmp
+__pycache__
+*.pyc

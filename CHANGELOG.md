@@ -1,5 +1,13 @@
 # Catatan perubahan NADI ASN
 
+## 5 Oktober 2026 — statistik pengunjung (dimulai 1 Oktober)
+
+- Statistik hari ini, kemarin, minggu/bulan/tahun, total dan online pada portal publik serta Command Center.
+- Browser dihitung sekali per hari WITA; reload/tab tidak menggandakan hitungan. Online adalah aktivitas lima menit terakhir.
+- Cookie terenkripsi pihak pertama, hash sementara tanpa identitas/IP/riwayat halaman, retensi presence dua hari kalender dan agregat historis.
+- Heartbeat stateless terlihat tiap menit, Origin wajib/rate limit, bot umum tidak dihitung; simulasi berlabel terpisah.
+- Delapan tes fitur termasuk isolasi sesi dan penolakan Origin asing; 85 tes backend/424 assertion serta 17 tes frontend lulus. Statistik dimulai saat fitur aktif tanpa mengarang data historis.
+
 ## 30 September 2026 — produksi publik dan operasi
 
 - Domain HTTPS nadiasndpmptspsulteng.online aktif; redirect HTTP/www, proxy upstream TLS terverifikasi dan perpanjangan sertifikat otomatis.

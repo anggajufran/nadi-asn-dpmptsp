@@ -110,3 +110,8 @@ Schedule::call(function () {
     ->withoutOverlapping();
 
 require __DIR__ . '/personnel_setup.php';
+
+Schedule::call(fn() => app(\App\Modules\Analytics\Services\VisitorStatistics::class)->prune())
+    ->name('nadi-visitor-presence-retention')
+    ->hourly()
+    ->withoutOverlapping();

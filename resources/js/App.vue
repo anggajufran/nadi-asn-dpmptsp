@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useVisitorTracking } from './api/visitors';
+useVisitorTracking();
 import Toast from './components/Toast.vue';
 </script>
 <template>

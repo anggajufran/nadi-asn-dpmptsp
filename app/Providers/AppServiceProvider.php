@@ -30,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
                 ),
             ],
         );
+        RateLimiter::for('visitors', fn($request) => Limit::perMinute(120)->by($request->ip()));
         RateLimiter::for('public', fn($request) => Limit::perMinute(60)->by($request->ip()));
         RateLimiter::for(
             'internal',

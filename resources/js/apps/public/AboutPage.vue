@@ -39,6 +39,14 @@ import Icon from '@/components/Icon.vue';
         Waktu disajikan terpisah.
       </p>
       <p>
+        Statistik pengunjung memakai cookie pihak pertama terenkripsi untuk mengenali browser,
+        berlaku paling lama satu tahun. Satu browser dihitung sekali per hari; online berarti aktif
+        dalam lima menit terakhir. Penghitung tidak menyimpan nama, NIP, alamat IP, atau riwayat
+        halaman. Penanda kunjungan harian disimpan paling lama dua hari kalender dan dibersihkan
+        tiap jam; jumlah agregat harian tetap disimpan. Menghapus cookie atau memakai browser lain
+        dapat membuat kunjungan dihitung sebagai pengunjung baru.
+      </p>
+      <p>
         Data pada mode simulasi sepenuhnya sintetis dan bukan merupakan statistik resmi instansi.
         Akses internal menggunakan pembatasan peran; Super Admin memeriksa perubahan data dan dapat
         menyetujui usulannya sendiri.

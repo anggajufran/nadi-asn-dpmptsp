@@ -2,7 +2,7 @@
 
 Navigasi dan Analitik Data Internal ASN: portal statistik publik dan aplikasi pengelolaan kepegawaian dengan Vue 3, TypeScript, Laravel 13 dan PostgreSQL 16.
 
-**Status 30 September 2026: produksi aktif dan siap digunakan.**
+**Status produksi: produksi aktif dan siap digunakan.**
 
 **Website:** https://nadiasndpmptspsulteng.online
 
@@ -15,6 +15,10 @@ Database VPS menjadi sumber utama. Repository memuat kode, migrasi, fixture simu
 - **Super Admin:** manajemen akun dan unit kerja, persetujuan, pengaturan urutan DUK dan laporan operasional. Super Admin dapat menyetujui usulan sendiri.
 
 Login internal menggunakan **NIP, password dan OTP**. Akun Admin dipilih dari Master Pegawai melalui Pengaturan → Manajemen Akun. Tautan aktivasi memungkinkan pengguna menentukan password dan autentikator sendiri. Admin yang lupa akses menghubungi Super Admin; pemulihan Super Admin menggunakan email terdaftar. Tidak tersedia password bawaan atau peran Pimpinan.
+
+## Pembaruan 5 Oktober 2026
+
+Statistik pengunjung tersedia pada portal dan Command Center: hari ini, kemarin, minggu ini, bulan ini, tahun ini, total serta online (aktif lima menit terakhir). Satu browser dihitung sekali per hari; angka periode/total merupakan akumulasi harian sejak fitur aktif. Lihat [definisi, privasi dan operasi statistik pengunjung](docs/operations/VISITOR_STATISTICS.md).
 
 ## Fitur utama
 

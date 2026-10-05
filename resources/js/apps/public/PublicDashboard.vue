@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import VisitorStats from '@/components/VisitorStats.vue';
 import ThemeToggle from '@/components/ThemeToggle.vue';
 import { ref, onMounted, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -332,6 +333,7 @@ onMounted(async () => {
           </div>
         </section>
       </div>
+      <VisitorStats />
       <footer class="public-footer">
         <span
           >© {{ new Date().getFullYear() }} NADI ASN · DPMPTSP Prov. Sulawesi Tengah · Developer:
