@@ -32,6 +32,7 @@ auth.json
 
 # Generated review images, caches and temporary document renders
 tmp/
+outputs/
 __pycache__/
 *.py[cod]
 

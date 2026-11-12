@@ -1,0 +1,69 @@
+name: Deploy NADI ASN to Live VPS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Code Quality & Syntax Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm'
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      - name: Check PHP Syntax
+        run: npm run check:php
+
+      - name: Vue & TypeScript Type Check
+        run: npx vue-tsc --noEmit
+
+  deploy:
+    name: Deploy to Production VPS
+    needs: [verify]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Execute Remote SSH Commands
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          passphrase: ${{ secrets.VPS_PASSPHRASE }}
+          port: ${{ secrets.VPS_PORT || 22 }}
+          script_stop: true
+          command_timeout: 30m
+          script: |
+            echo "=== [1/5] Pulling latest code from GitHub ==="
+            cd /home/anggauser/nadi-asn
+            git pull origin main
+
+            echo "=== [2/5] Building app & web Docker images ==="
+            docker compose -f infra/compose.yaml -f infra/domain/compose.proxy.yaml build app web
+
+            echo "=== [3/5] Restarting services (zero database interruption) ==="
+            docker compose -f infra/compose.yaml -f infra/domain/compose.proxy.yaml up -d --no-deps app web worker scheduler
+
+            echo "=== [4/5] Running database migrations & route/config cache ==="
+            docker compose -f infra/compose.yaml -f infra/domain/compose.proxy.yaml exec app php artisan migrate --force
+            docker compose -f infra/compose.yaml -f infra/domain/compose.proxy.yaml exec app php artisan optimize
+
+            echo "=== [5/5] Running production preflight check ==="
+            docker compose -f infra/compose.yaml -f infra/domain/compose.proxy.yaml exec app php artisan nadi:preflight
+
+            echo "=== DEPLOYMENT SUCCESSFUL ==="
