@@ -317,7 +317,7 @@ export function demoServer(): Plugin {
               !['PNS', 'PPPK Penuh Waktu', 'PPPK Paruh Waktu'].includes(candidate.type) ||
               !['Perempuan', 'Laki-laki'].includes(candidate.gender) ||
               !candidate.position ||
-              !['Aktif', 'Pensiun', 'Mutasi', 'Meninggal'].includes(candidate.status)
+              !['Aktif', 'Pensiun', 'Mutasi', 'Meninggal', 'Mengundurkan Diri'].includes(candidate.status)
             )
               return send(
                 { message: 'Lengkapi data wajib, NIP 18 digit, dan tanggal efektif.' },

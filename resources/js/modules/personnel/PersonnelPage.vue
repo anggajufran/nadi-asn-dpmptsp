@@ -261,7 +261,16 @@ async function download() {
               </button>
             </td>
             <td>
-              <span class="badge green">{{ e.status }}</span
+              <span
+                class="badge"
+                :class="
+                  e.status === 'Aktif'
+                    ? 'green'
+                    : e.status === 'Mengundurkan Diri' || e.status === 'Meninggal'
+                      ? 'red'
+                      : 'gray'
+                "
+                >{{ e.status }}</span
               ><button class="icon-button" :aria-label="`Lihat ${e.name}`" @click="detail = e">
                 <Icon name="Eye" :size="16" />
               </button>
