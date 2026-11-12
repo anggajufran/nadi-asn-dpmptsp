@@ -181,12 +181,14 @@ async function download() {
   </div>
   <div class="directory-summary">
     <span
-      ><strong>{{ rows.length }}</strong> seluruh pegawai</span
+      ><strong>{{ rows.filter((e) => e.status === 'Aktif').length }}</strong> pegawai aktif</span
     ><span
-      ><strong>{{ rows.filter((e) => e.type !== 'PPPK Paruh Waktu').length }}</strong> ASN</span
+      ><strong>{{ rows.filter((e) => e.status === 'Aktif' && e.type !== 'PPPK Paruh Waktu').length }}</strong> ASN</span
     ><span
-      ><strong>{{ rows.filter((e) => e.type === 'PPPK Paruh Waktu').length }}</strong> PPPK Paruh
+      ><strong>{{ rows.filter((e) => e.status === 'Aktif' && e.type === 'PPPK Paruh Waktu').length }}</strong> PPPK Paruh
       Waktu</span
+    ><span class="text-muted"
+      ><strong>{{ rows.filter((e) => e.status !== 'Aktif').length }}</strong> non-aktif</span
     ><button class="text-link" @click="quality = quality ? '' : 'incomplete'">
       {{ rows.filter((e) => e.completeness < 100).length }} perlu dilengkapi
     </button>
@@ -213,7 +215,7 @@ async function download() {
         <option v-for="u in units" :key="u">{{ u }}</option></select
       ><select v-model="status" aria-label="Filter status pegawai">
         <option value="">Semua status</option>
-        <option v-for="s in ['Aktif', 'Pensiun', 'Mutasi', 'Meninggal']" :key="s">
+        <option v-for="s in ['Aktif', 'Pensiun', 'Mutasi', 'Meninggal', 'Mengundurkan Diri']" :key="s">
           {{ s }}
         </option></select
       ><button v-if="quality" class="button button-outline" @click="quality = ''">
@@ -393,7 +395,7 @@ async function download() {
             :required="['name', 'nip', 'position'].includes(f.key)" /></label
         ><label
           >Status<select v-model="form.status">
-            <option v-for="s in ['Aktif', 'Pensiun', 'Mutasi', 'Meninggal']" :key="s">
+            <option v-for="s in ['Aktif', 'Pensiun', 'Mutasi', 'Meninggal', 'Mengundurkan Diri']" :key="s">
               {{ s }}
             </option>
           </select></label

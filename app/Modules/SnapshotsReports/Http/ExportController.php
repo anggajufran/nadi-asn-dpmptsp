@@ -49,7 +49,7 @@ class ExportController
             'unit' => 'nullable|string|max:150',
             'type' => 'nullable|in:PNS,PPPK Penuh Waktu,PPPK Paruh Waktu',
             'positionType' => 'nullable|in:Struktural,Fungsional,Pelaksana',
-            'status' => 'nullable|in:Aktif,Pensiun,Mutasi,Meninggal',
+            'status' => 'nullable|in:Aktif,Pensiun,Mutasi,Meninggal,Mengundurkan Diri',
             'search' => 'nullable|string|max:150',
             'quality' => 'nullable|boolean',
             'allStatuses' => 'nullable|boolean',

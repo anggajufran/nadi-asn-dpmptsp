@@ -69,7 +69,7 @@ final class ChangeService
             'position' => 'required|string|max:200',
             'positionType' => 'required|in:Struktural,Fungsional,Pelaksana',
             'grade' => 'nullable|string|max:20',
-            'status' => 'required|in:Aktif,Pensiun,Mutasi,Meninggal',
+            'status' => 'required|in:Aktif,Pensiun,Mutasi,Meninggal,Mengundurkan Diri',
             'effectiveDate' => 'nullable|date_format:Y-m-d',
             'birthPlace' => 'nullable|string|max:100',
             'birthDate' => 'nullable|date_format:Y-m-d|before_or_equal:today',

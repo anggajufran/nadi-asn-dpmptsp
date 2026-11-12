@@ -11,7 +11,7 @@ class EmployeeController
             'search' => 'nullable|string|max:100',
             'unit' => 'nullable|string|max:150',
             'type' => 'nullable|in:PNS,PPPK Penuh Waktu,PPPK Paruh Waktu',
-            'status' => 'nullable|in:Aktif,Pensiun,Mutasi,Meninggal',
+            'status' => 'nullable|in:Aktif,Pensiun,Mutasi,Meninggal,Mengundurkan Diri',
             'page' => 'nullable|integer|min:1',
             'per_page' => 'nullable|integer|min:1|max:100',
         ]);

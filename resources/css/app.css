@@ -3388,6 +3388,10 @@ textarea,
   font-size: 18px;
   margin-right: 5px;
 }
+.directory-summary .text-muted strong {
+  color: var(--muted, #718096);
+  font-size: 15px;
+}
 .directory-filters {
   display: flex;
   flex-wrap: wrap;
@@ -4168,6 +4172,12 @@ textarea,
 }
 [data-theme='dark'] .editable-sheet td.changed {
   background: #493e22;
+}
+[data-theme='dark'] .directory-summary strong {
+  color: #c7dcff;
+}
+[data-theme='dark'] .directory-summary .text-muted strong {
+  color: var(--muted);
 }
 [data-theme='dark'] :is(.horizontal-track, .bar-track, .unit-track) {
   background: #2c405b;
