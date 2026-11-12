@@ -21,7 +21,7 @@
 
 ## Operasi dan pengembangan
 
-- [Setup lingkungan baru](operations/SETUP.md) dan [akses VPS](operations/VPS_PRIVATE.md)
+- [Setup lingkungan baru](operations/SETUP.md), [akses VPS](operations/VPS_PRIVATE.md) dan [otomatisasi deployment CI/CD](operations/DEPLOYMENT_AUTOMATION.md)
 - [Domain dan HTTPS](operations/DOMAIN_2026-09-30.md)
 - [Pemantauan dan gangguan](operations/MONITORING.md)
 - [Backup data dan pemulihan](operations/BACKUP_GOOGLE_DRIVE.md)
